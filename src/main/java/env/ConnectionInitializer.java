@@ -26,11 +26,11 @@ public class ConnectionInitializer {
     }
 
     try{
-      return DriverManager.getConnection(connectURL, "root", "root");
+      return DriverManager.getConnection(connectURL, username, password);
     }catch(SQLException e){
       System.out.println("Could not connect to the database");
+      return null;
     }
-    return null;
   }
 
   public static void printSampleDBQuery() throws SQLException {

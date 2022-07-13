@@ -9,28 +9,6 @@ create table if not exists Amenities
 alter table Amenities
 	add primary key (name);
 
-create table if not exists Availabilities
-(
-	listingID int not null,
-	startDate date not null,
-	endDate date not null,
-	pricePerNight float not null,
-	primary key (listingID, startDate)
-);
-
-create index Availabilities_listingID_index
-	on Availabilities (listingID);
-
-create table if not exists PaymentInfo
-(
-	id int auto_increment,
-	cardNumber int not null,
-	cardName varchar(200) charset utf8mb3 not null,
-	expiryDate date null,
-	constraint PaymentInfo_id_uindex
-		unique (id)
-);
-
 create table if not exists User
 (
 	id int auto_increment
@@ -85,6 +63,20 @@ create table if not exists Address
 		foreign key (listingID) references Listing (id)
 );
 
+create table if not exists Availabilities
+(
+	pricePerNight float not null,
+	endDate date not null,
+	startDate date not null,
+	listingID int not null,
+	primary key (listingID, startDate),
+	constraint Availabilities_Listing_id_fk
+		foreign key (listingID) references Listing (id)
+);
+
+create index Availabilities_listingID_index
+	on Availabilities (listingID);
+
 create table if not exists ListingAmenities
 (
 	listingID int not null comment 'part of primary key',
@@ -129,6 +121,19 @@ create table if not exists Bookings
 
 alter table Bookings
 	add primary key (id);
+
+create table if not exists PaymentInfo
+(
+	id int auto_increment,
+	cardNumber int not null,
+	cardName varchar(200) charset utf8mb3 not null,
+	expiryDate date null,
+	renterID int not null,
+	constraint PaymentInfo_id_uindex
+		unique (id),
+	constraint PaymentInfo_Renter_id_fk
+		foreign key (renterID) references Renter (id)
+);
 
 create table if not exists Review
 (

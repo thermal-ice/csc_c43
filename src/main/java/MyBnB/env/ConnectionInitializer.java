@@ -1,4 +1,4 @@
-package env;
+package MyBnB.env;
 
 import io.github.cdimascio.dotenv.Dotenv;
 import java.sql.Connection;
@@ -9,7 +9,7 @@ import java.sql.SQLException;
 
 public class ConnectionInitializer {
 
-  // Have each of these variables defined in your .env file !!!
+  // Have each of these variables defined in your .MyBnB.env file !!!
   public static String CONNECTION_STRING = "CONNECTION_STRING";
   public static String USERNAME = "USERNAME";
   public static String PASSWORD = "PASSWORD";
@@ -21,7 +21,7 @@ public class ConnectionInitializer {
     String password = dotenv.get(PASSWORD);
 
     if (connectURL == null || username == null || password == null){
-      System.out.println("Could not get values from .env file");
+      System.out.println("Could not get values from .MyBnB.env file");
       return null;
     }
 

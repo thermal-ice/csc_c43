@@ -16,7 +16,8 @@ create table if not exists User
 	name varchar(200) charset utf8mb3 not null,
 	birthdate date not null,
 	occupation varchar(100) charset utf8mb3 null,
-	sin int not null,
+	sin char(11) not null,
+	isActive tinyint not null,
 	constraint User_sin_uindex
 		unique (sin)
 );
@@ -109,6 +110,7 @@ create table if not exists Bookings
 	listingID int not null,
 	endDate date not null,
 	startDate date not null,
+	status varchar(11) null,
 	constraint Bookings_id_uindex
 		unique (id),
 	constraint Bookings_Host_id_fk
@@ -125,7 +127,7 @@ alter table Bookings
 create table if not exists PaymentInfo
 (
 	id int auto_increment,
-	cardNumber int not null,
+	cardNumber varchar(20) not null,
 	cardName varchar(200) charset utf8mb3 not null,
 	expiryDate date null,
 	renterID int not null,

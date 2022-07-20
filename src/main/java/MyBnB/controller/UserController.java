@@ -26,6 +26,7 @@ public class UserController {
 
     @GetMapping("/getAllUsers")
     public List<User> getAllUsers() {
+        System.out.println("Getting all users....");
         return userRepository.getAllUsers();
     }
 
@@ -41,7 +42,7 @@ public class UserController {
 
     @PostMapping("/deleteUser")
     public void deleteUser(@RequestParam("id") int id) {
-        userRepository.getUser(id);
+        userRepository.deleteUser(id);
     }
 }
 

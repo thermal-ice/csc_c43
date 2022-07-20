@@ -13,7 +13,6 @@ public class User {
     private int isActive;
 
     public User() {
-        super();
     }
 
     // need this for post request - to get data back in user format

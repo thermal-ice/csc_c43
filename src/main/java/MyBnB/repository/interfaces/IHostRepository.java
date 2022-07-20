@@ -1,11 +1,12 @@
 package MyBnB.repository.interfaces;
 
 import MyBnB.models.Host;
-import MyBnB.models.User;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-public interface HostRepository {
+@Repository
+public interface IHostRepository {
     public List<Host> getAllHosts();
     public void addHost(Host host);
     public Host getHost(int id);

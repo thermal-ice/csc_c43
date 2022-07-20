@@ -1,6 +1,8 @@
 package MyBnB.repository.implementations;
 import MyBnB.models.User;
+import MyBnB.repository.interfaces.IUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -9,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Repository
-public class UserRepository implements MyBnB.repository.interfaces.UserRepository {
+public class UserRepository implements IUserRepository {
     // auto-wiring jdbc template using the properties configured in app.prop
     // spring automatically detects and creates jdbc template obj using the configuration
     @Autowired
@@ -21,6 +23,7 @@ public class UserRepository implements MyBnB.repository.interfaces.UserRepositor
         userNames.addAll(jdbcTemplate.queryForList(query, String.class));
         return userNames;
     }
+
 
     @Override
     public List<User> getAllUsers() {
@@ -37,12 +40,13 @@ public class UserRepository implements MyBnB.repository.interfaces.UserRepositor
     @Override
     public void addUser(User user) {
         jdbcTemplate.update("insert into User values (?, ?, ?, ?, ?, ?);",
-                user.getId(), user.getName(), user.getBirthdate(), user.getOccupation(), user.getSin(), user.getIsActive());
+                user.getId(), user.getName(), user.getBirthdate(),
+                user.getOccupation(), user.getSin(), user.getIsActive());
     }
 
     @Override
     public void deleteUser(int id) {
-        jdbcTemplate.update("delete books where id = ?", id);
+        jdbcTemplate.update("delete from User where id = ?", id);
     }
 }
 

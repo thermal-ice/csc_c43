@@ -16,7 +16,7 @@ create table if not exists User
 	name varchar(200) charset utf8mb3 not null,
 	birthdate date not null,
 	occupation varchar(100) charset utf8mb3 null,
-	sin char(11) not null,
+	sin varchar(11) not null,
 	isActive tinyint not null,
 	constraint User_sin_uindex
 		unique (sin)
@@ -161,3 +161,4 @@ create table if not exists Review
 alter table Review
 	add primary key (id);
 
+ALTER TABLE PaymentInfo ADD CONSTRAINT cardNumberIsNumeric CHECK ( REGEXP_LIKE(cardNumber, '^[0-9]+$'));

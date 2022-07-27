@@ -26,7 +26,7 @@ public class BookingController {
     return bookingRepository.getAllBookings();
   }
 
-  @GetMapping("/getBooking")
+  @GetMapping("/get")
   public @ResponseBody Booking getBooking(@RequestParam("id") int id){
     return bookingRepository.getBooking(id);
   }

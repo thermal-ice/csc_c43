@@ -2,19 +2,26 @@ package MyBnB.controller;
 
 import MyBnB.models.User;
 import MyBnB.repository.implementations.UserRepository;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+
+
 @RestController
-@RequestMapping(path="/")
+//@RequestMapping(path="/")
 public class UserController {
+
     @Autowired
     UserRepository userRepository;
 
     // testing purposes
-    @GetMapping
+
+    @GetMapping("/check")
+    @Tag(name = "blah")
     public String check() {
         return "App is running...";
     }
@@ -25,7 +32,10 @@ public class UserController {
     }
 
     @GetMapping("/getAllUsers")
-    public List<User> getAllUsers() {
+    public List<User> getAllUsers(@RequestParam Optional<User.UserStatus> status) {
+        if (status.isPresent()){
+          return userRepository.getAllUsersByStatus(status.get());
+        }
         System.out.println("Getting all users....");
         return userRepository.getAllUsers();
     }

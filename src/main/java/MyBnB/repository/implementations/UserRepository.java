@@ -48,6 +48,12 @@ public class UserRepository implements IUserRepository {
     public void deleteUser(int id) {
         jdbcTemplate.update("delete from User where id = ?", id);
     }
+
+  @Override
+  public List<User> getAllUsersByStatus(User.UserStatus status) {
+    return jdbcTemplate.query("select * from User where isActive=?;",
+        new BeanPropertyRowMapper(User.class), status.isActive());
+  }
 }
 
 

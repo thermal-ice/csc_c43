@@ -1,13 +1,27 @@
 package MyBnB.models;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDate;
 
 public class User {
+
+  public enum UserStatus{
+    ACTIVE(1),
+    INACTIVE(0);
+
+    private final int isActive;
+    private UserStatus(int isActive){
+      this.isActive = isActive;
+    }
+
+    public int isActive(){
+      return this.isActive;
+    }
+  }
     // fields names should be exact same as table columns
     private int id;
     private String name;
-    private Date birthdate;
+    private LocalDate birthdate;
     private String occupation;
     private String sin;
     private int isActive;
@@ -16,7 +30,7 @@ public class User {
     }
 
     // need this for post request - to get data back in user format
-    public User(int id, String name, Date birthdate, String occupation, String sin, int isActive){
+    public User(int id, String name, LocalDate birthdate, String occupation, String sin, int isActive){
         super();
         this.id = id;
         this.name=name;
@@ -42,11 +56,11 @@ public class User {
         this.name = name;
     }
 
-    public Date getBirthdate() {
+    public LocalDate getBirthdate() {
         return birthdate;
     }
 
-    public void setBirthdate(Date birthdate) {
+    public void setBirthdate(LocalDate birthdate) {
         this.birthdate = birthdate;
     }
 

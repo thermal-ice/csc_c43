@@ -57,7 +57,7 @@ create table if not exists Address
 		primary key,
 	addressLine varchar(500) charset utf8mb3 not null,
 	city varchar(100) charset utf8mb3 null,
-	`province-territory` varchar(30) charset utf8mb3 not null,
+	`province_territory` varchar(30) charset utf8mb3 not null,
 	postalCode varchar(10) charset utf8mb3 not null,
 	country varchar(50) charset utf8mb3 not null,
 	constraint Address_Listing_id_fk

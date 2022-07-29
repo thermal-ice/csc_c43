@@ -1,11 +1,11 @@
 package MyBnB.controller;
 
+import MyBnB.models.Amenities;
 import MyBnB.models.Listing;
-import MyBnB.models.Renter;
-import MyBnB.models.User;
+import MyBnB.models.ListingAmenities;
+import MyBnB.repository.implementations.ListingAmenitiesRepository;
 import MyBnB.repository.implementations.ListingRepository;
 import java.util.List;
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 
@@ -23,6 +24,9 @@ public class ListingController {
 
   @Autowired
   ListingRepository listingRepository;
+
+  @Autowired
+  ListingAmenitiesRepository listingAmenitiesRepository;
 
   @GetMapping("/all")
   public List<Listing> getAllListings() {
@@ -50,6 +54,18 @@ public class ListingController {
     listingRepository.updateListing(updatedListing);
     return ResponseEntity.status(HttpStatus.OK).body("Success!");
   }
+
+  @GetMapping("/amenities")
+  public List<Amenities> getAllAmenitiesForListing(@RequestParam("listingId")  int listingID){
+    return listingAmenitiesRepository.getAllAmenitiesForListingID(listingID);
+  }
+
+  @GetMapping("/allListingAmenities")
+  public List<ListingAmenities> getAllListingAmenities(){
+    return listingAmenitiesRepository.getAllListingAmenities();
+  }
+
+
 
 
 }

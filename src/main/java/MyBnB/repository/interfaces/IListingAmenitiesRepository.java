@@ -7,7 +7,7 @@ import java.util.List;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface IListingAmenities {
+public interface IListingAmenitiesRepository {
   public List<ListingAmenities> getAllListingAmenities();
   public List<Listing> getAllListingsForAmenity(String amenityName);
   public List<Amenities> getAllAmenitiesForListingID(int listingID);

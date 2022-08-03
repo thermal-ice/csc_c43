@@ -1,8 +1,6 @@
 package MyBnB.repository.implementations;
 
-import MyBnB.models.Listing;
-import MyBnB.models.PaymentInfo;
-import MyBnB.models.Renter;
+import MyBnB.models.basic.PaymentInfo;
 import MyBnB.repository.interfaces.IPaymentInfoRepository;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;

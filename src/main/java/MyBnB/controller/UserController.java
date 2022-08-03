@@ -1,6 +1,6 @@
 package MyBnB.controller;
 
-import MyBnB.models.User;
+import MyBnB.models.basic.User;
 import MyBnB.repository.implementations.UserRepository;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.Optional;

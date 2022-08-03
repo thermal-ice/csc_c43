@@ -1,7 +1,6 @@
 package MyBnB.repository.implementations;
 
-import MyBnB.models.Amenities;
-import MyBnB.models.Availabilities;
+import MyBnB.models.basic.Availabilities;
 import MyBnB.repository.interfaces.IAvailabilitiesRepository;
 import java.time.LocalDate;
 import java.util.List;

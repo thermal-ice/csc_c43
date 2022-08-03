@@ -1,6 +1,6 @@
 package MyBnB.repository.interfaces;
 
-import MyBnB.models.Host;
+import MyBnB.models.basic.Host;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

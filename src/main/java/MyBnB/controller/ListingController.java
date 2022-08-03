@@ -1,10 +1,10 @@
 package MyBnB.controller;
 
-import MyBnB.models.Amenities;
-import MyBnB.models.Host;
-import MyBnB.models.Listing;
-import MyBnB.models.ListingAmenities;
+import MyBnB.models.basic.Host;
 import MyBnB.repository.implementations.HostRepository;
+import MyBnB.models.basic.Amenities;
+import MyBnB.models.basic.Listing;
+import MyBnB.models.basic.ListingAmenities;
 import MyBnB.repository.implementations.ListingAmenitiesRepository;
 import MyBnB.repository.implementations.ListingRepository;
 import java.util.List;

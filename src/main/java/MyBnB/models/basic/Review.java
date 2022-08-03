@@ -1,4 +1,4 @@
-package MyBnB.models;
+package MyBnB.models.basic;
 
 public class Review {
   private int id;

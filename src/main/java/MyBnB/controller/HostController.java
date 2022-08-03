@@ -1,6 +1,6 @@
 package MyBnB.controller;
 
-import MyBnB.models.Host;
+import MyBnB.models.basic.Host;
 import MyBnB.repository.implementations.HostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

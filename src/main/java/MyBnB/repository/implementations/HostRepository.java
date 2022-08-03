@@ -1,8 +1,7 @@
 package MyBnB.repository.implementations;
 
-import MyBnB.models.Host;
-import MyBnB.models.Renter;
-import MyBnB.models.User;
+import MyBnB.models.basic.Host;
+import MyBnB.models.basic.User;
 import MyBnB.repository.interfaces.IHostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

@@ -1,4 +1,4 @@
-package MyBnB.models;
+package MyBnB.models.basic;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.List;

@@ -1,7 +1,6 @@
 package MyBnB.repository.implementations;
 
-import MyBnB.models.Booking;
-import MyBnB.models.Listing;
+import MyBnB.models.basic.Booking;
 import MyBnB.repository.interfaces.IBookingRepository;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;

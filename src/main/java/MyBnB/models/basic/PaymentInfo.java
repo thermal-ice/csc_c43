@@ -1,4 +1,4 @@
-package MyBnB.models;
+package MyBnB.models.basic;
 
 import java.time.LocalDate;
 

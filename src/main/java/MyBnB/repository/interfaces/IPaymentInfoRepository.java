@@ -1,6 +1,6 @@
 package MyBnB.repository.interfaces;
 
-import MyBnB.models.PaymentInfo;
+import MyBnB.models.basic.PaymentInfo;
 import java.util.List;
 import org.springframework.stereotype.Repository;
 

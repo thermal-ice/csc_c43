@@ -1,8 +1,7 @@
 package MyBnB.repository.implementations;
-import MyBnB.models.User;
+import MyBnB.models.basic.User;
 import MyBnB.repository.interfaces.IUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;

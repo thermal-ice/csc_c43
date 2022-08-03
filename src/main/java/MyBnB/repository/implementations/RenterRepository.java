@@ -1,6 +1,6 @@
 package MyBnB.repository.implementations;
 
-import MyBnB.models.Renter;
+import MyBnB.models.basic.Renter;
 import MyBnB.repository.interfaces.IRenterRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

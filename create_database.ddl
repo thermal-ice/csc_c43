@@ -17,7 +17,6 @@ create table if not exists User
 	birthdate date not null,
 	occupation varchar(100) charset utf8mb3 null,
 	sin varchar(11) not null,
-	isActive tinyint not null,
 	constraint User_sin_uindex
 		unique (sin)
 );
@@ -29,6 +28,7 @@ create table if not exists Host
 		unique (id),
 	constraint Host___fk_id
 		foreign key (id) references User (id)
+		on delete cascade
 );
 
 alter table Host
@@ -46,6 +46,7 @@ create table if not exists Listing
 		unique (id),
 	constraint Listing_Host_id_fk
 		foreign key (hostID) references Host (id)
+		on delete cascade
 );
 
 alter table Listing
@@ -62,6 +63,7 @@ create table if not exists Address
 	country varchar(50) charset utf8mb3 not null,
 	constraint Address_Listing_id_fk
 		foreign key (listingID) references Listing (id)
+		on delete cascade
 );
 
 create table if not exists Availabilities
@@ -73,6 +75,7 @@ create table if not exists Availabilities
 	primary key (listingID, startDate),
 	constraint Availabilities_Listing_id_fk
 		foreign key (listingID) references Listing (id)
+		on delete cascade
 );
 
 create index Availabilities_listingID_index
@@ -85,9 +88,11 @@ create table if not exists ListingAmenities
 	constraint ListingAmenities_pk
 		unique (listingID, amenity),
 	constraint ListingAmenities_Amenities_name_fk
-		foreign key (amenity) references Amenities (name),
+		foreign key (amenity) references Amenities (name)
+		on delete cascade,
 	constraint ListingAmenities_Listing_id_fk
 		foreign key (listingID) references Listing (id)
+		on delete cascade
 );
 
 create table if not exists Renter
@@ -97,6 +102,7 @@ create table if not exists Renter
 		unique (id),
 	constraint Renter___fk_id
 		foreign key (id) references User (id)
+		on delete cascade
 );
 
 alter table Renter
@@ -114,11 +120,14 @@ create table if not exists Bookings
 	constraint Bookings_id_uindex
 		unique (id),
 	constraint Bookings_Host_id_fk
-		foreign key (hostID) references Host (id),
+		foreign key (hostID) references Host (id)
+		on delete cascade,
 	constraint Bookings_Listing_id_fk
-		foreign key (listingID) references Listing (id),
+		foreign key (listingID) references Listing (id)
+		on delete cascade,
 	constraint Bookings_Renter_id_fk
 		foreign key (renterID) references Renter (id)
+		on delete cascade
 );
 
 alter table Bookings
@@ -135,6 +144,7 @@ create table if not exists PaymentInfo
 		unique (id),
 	constraint PaymentInfo_Renter_id_fk
 		foreign key (renterID) references Renter (id)
+		on delete cascade
 );
 
 create table if not exists Review
@@ -149,13 +159,17 @@ create table if not exists Review
 	constraint Review_id_uindex
 		unique (id),
 	constraint Review_Bookings_id_fk
-		foreign key (bookingID) references Bookings (id),
+		foreign key (bookingID) references Bookings (id)
+		on delete cascade,
 	constraint Review_Listing_id_fk
-		foreign key (listingID) references Listing (id),
+		foreign key (listingID) references Listing (id)
+		on delete cascade,
 	constraint Review_User_id_fk
-		foreign key (reviewerID) references User (id),
+		foreign key (reviewerID) references User (id)
+		on delete cascade,
 	constraint Review_User_id_fk_2
 		foreign key (revieweeID) references User (id)
+		on delete cascade
 );
 
 alter table Review

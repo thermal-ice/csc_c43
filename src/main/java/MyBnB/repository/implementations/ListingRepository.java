@@ -36,10 +36,15 @@ public class ListingRepository implements IListingRepository {
 
   @Override
   public void addListing(Listing newListing) {
-    jdbcTemplate.update("insert into Listing (type, latitude, longitude, addressID, hostID) " +
+    jdbcTemplate.update("INSERT INTO Listing (type, latitude, longitude, addressID, hostID) " +
         "values (?,?,?,?,?);",
         newListing.getType(),newListing.getLatitude(),newListing.getLongitude(),newListing.getAddressID(),
         newListing.getHostID());
+  }
+
+  @Override
+  public void deleteListing(int listingID) {
+    jdbcTemplate.update("DELETE FROM Listing WHERE id = ?", listingID);
   }
 
   @Override

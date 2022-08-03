@@ -3,6 +3,7 @@ import MyBnB.models.User;
 import MyBnB.repository.interfaces.IUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -33,8 +34,12 @@ public class UserRepository implements IUserRepository {
 
     @Override
     public User getUser(int id) {
-        return (User) jdbcTemplate.queryForObject("select * from User where id=?;",
-                new BeanPropertyRowMapper(User.class), id);
+        try {
+            return (User) jdbcTemplate.queryForObject("select * from User where id=?;",
+                    new BeanPropertyRowMapper(User.class), id);
+        } catch (EmptyResultDataAccessException e){
+            return null;
+        }
     }
 
     @Override

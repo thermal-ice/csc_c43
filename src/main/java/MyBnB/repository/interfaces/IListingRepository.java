@@ -10,6 +10,6 @@ public interface IListingRepository {
   public List<Listing> getAllListings();
   public Listing getListing(int listingID);
   public void addListing(Listing newListing);
+  public void deleteListing(int listingID);
   public void updateListing(Listing updatedListing);
-
 }

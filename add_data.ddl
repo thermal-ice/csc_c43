@@ -1,9 +1,9 @@
-insert into User (id, name, birthdate, occupation, sin, isActive)
+insert into User (id, name, birthdate, occupation, sin)
 values
-    (1, 'Avery Marchmount', '2000-05-21', 'architect', '233 472 976', 1),
-    (2, 'Afsaneh Ali', '1998-02-05', 'product manager', '951 558 030', 1),
-    (3, 'William Fairgrie', '2000-05-21', 'student', '202 397 022', 1),
-    (4, 'Afsaneh Ali', '1995-12-10', 'farmer', '233 834 928', 1);
+    (1, 'Avery Marchmount', '2000-05-21', 'architect', '233 472 976'),
+    (2, 'Afsaneh Ali', '1998-02-05', 'product manager', '951 558 030'),
+    (3, 'William Fairgrie', '2000-05-21', 'student', '202 397 022'),
+    (4, 'Afsaneh Ali', '1995-12-10', 'farmer', '233 834 928');
 
 insert into Renter values (2);
 insert into Renter values (3);
@@ -159,7 +159,7 @@ values
   (2, 'Dining table'),
   (2, 'Hair dryer'),
   (2, 'Cleaning products'),
-  
+
   (3, 'Dedicated workspace'),
   (3, 'Refrigerator'),
   (3, 'Cooking basics'),
@@ -184,7 +184,7 @@ values
   (7, 'Table corner guards'),
   (7, 'Hot water');
 
-insert into Address (listingID, addressLine, city, `province-territory`, postalCode, country)
+insert into Address (listingID, addressLine, city, province_territory, postalCode, country)
 values
     (1, '2089 Columbia Road', 'Scarborough', 'ON', 'H7M 4V2', 'Canada'),
     (2, '3230 Travis Street', 'Newmarket', 'ON', 'P5E 1E8', 'Canada'),

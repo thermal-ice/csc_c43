@@ -6,6 +6,7 @@ import MyBnB.models.User;
 import MyBnB.repository.interfaces.IHostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -35,7 +36,12 @@ public class HostRepository implements IHostRepository {
     // gets the user by id from User, instantiate the host
     @Override
     public Host getHost(int id) {
-        return new Host(userRepository.getUser(id).getId());
+        // TODO: do something if host doesn't exist...
+        try {
+            return new Host(userRepository.getUser(id).getId());
+        } catch (EmptyResultDataAccessException e){
+            return null;
+        }
     }
 
     @Override

@@ -1,8 +1,10 @@
 package MyBnB.controller;
 
 import MyBnB.models.Amenities;
+import MyBnB.models.Host;
 import MyBnB.models.Listing;
 import MyBnB.models.ListingAmenities;
+import MyBnB.repository.implementations.HostRepository;
 import MyBnB.repository.implementations.ListingAmenitiesRepository;
 import MyBnB.repository.implementations.ListingRepository;
 import java.util.List;
@@ -28,6 +30,9 @@ public class ListingController {
   @Autowired
   ListingAmenitiesRepository listingAmenitiesRepository;
 
+  @Autowired
+  HostRepository hostRepository;
+
   @GetMapping("/all")
   public List<Listing> getAllListings() {
     return listingRepository.getAllListings();
@@ -39,14 +44,33 @@ public class ListingController {
     listingRepository.addListing(newListing);
   }
 
+  @PostMapping("/delete")
+  public ResponseEntity<String> deleteListing(@RequestParam("listingId")  int listingID, @RequestParam("hostId")  int hostId){
+    System.out.println(listingID);
+    System.out.println(hostId);
+
+    Listing existingListing = listingRepository.getListing(listingID);
+    // TODO: null pointer exception if host doesn't exist... fix it
+    Host existingHost = hostRepository.getHost(hostId);
+
+    if (existingListing == null || existingHost == null){
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Listing or Host with this ID doesn't exist!");
+    }
+    if(existingListing.getHostID() != hostId){
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid permissions: the hostID doesn't match this listing's ID!");
+    }
+    listingRepository.deleteListing(listingID);
+    return ResponseEntity.status(HttpStatus.OK).body("Success!");
+  }
 
   @PutMapping("/update")
   public ResponseEntity<String> updateListing(@RequestBody Listing updatedListing){
     System.out.println(updatedListing);
     Listing existingListing= listingRepository.getListing(updatedListing.getId());
+    Host existingHost = hostRepository.getHost(updatedListing.getHostID());
 
-    if (existingListing == null){
-      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Listing with this ID doesn't exist!");
+    if (existingListing == null || existingHost == null) {
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Listing or Host with this ID doesn't exist!");
     }
     if(existingListing.getHostID() != updatedListing.getHostID()){
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid permissions: the hostID doesn't match this listing's ID!");

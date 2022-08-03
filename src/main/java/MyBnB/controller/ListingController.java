@@ -3,6 +3,7 @@ package MyBnB.controller;
 import MyBnB.models.basic.Amenities;
 import MyBnB.models.basic.Listing;
 import MyBnB.models.basic.ListingAmenities;
+import MyBnB.models.composite.ListingWithDistanceAndPrice;
 import MyBnB.repository.implementations.ListingAmenitiesRepository;
 import MyBnB.repository.implementations.ListingRepository;
 import java.util.List;
@@ -27,6 +28,12 @@ public class ListingController {
 
   @Autowired
   ListingAmenitiesRepository listingAmenitiesRepository;
+
+  public enum OrderBy{
+    DISTANCE,
+    PRICE_ASC,
+    PRICE_DESC
+  }
 
   @GetMapping("/all")
   public List<Listing> getAllListings() {
@@ -64,6 +71,16 @@ public class ListingController {
   public List<ListingAmenities> getAllListingAmenities(){
     return listingAmenitiesRepository.getAllListingAmenities();
   }
+
+  @GetMapping("/getWithinDistance")
+  public List<ListingWithDistanceAndPrice> getAllListingsWithinDistance(@RequestParam("latitude")  double latitude,
+                                                                        @RequestParam("longitude")  double longitude,
+                                                                        @RequestParam(value = "radius", defaultValue = "50")  double radius,
+                                                                        @RequestParam(value = "OrderBy") OrderBy orderBy){
+    return listingRepository.getListingsWithinDistance(latitude,longitude,radius, orderBy);
+  }
+
+
 
 
 

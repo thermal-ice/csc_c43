@@ -20,6 +20,7 @@ public class GroupsConfiguration {
   public GroupedOpenApi publicApi() {
     String[] matchingPaths = {"/public/**"};
     return GroupedOpenApi.builder()
+        .addOpenApiCustomiser(openApiCustomiserPublic())
         .group("public-stuff")
         .pathsToMatch(matchingPaths)
         .build();
@@ -30,6 +31,6 @@ public class GroupsConfiguration {
   private OpenApiCustomiser openApiCustomiserPublic() {
     return openApi -> openApi.getPaths().entrySet()
         .removeIf(path -> path.getValue().readOperations().stream()
-            .anyMatch(operation -> operation.getTags().contains("blah")));
+            .anyMatch(operation -> operation.getTags().contains("stuff")));
   }
 }

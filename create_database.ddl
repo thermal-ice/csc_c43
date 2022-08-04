@@ -14,7 +14,6 @@ create table if not exists User
     sin varchar(11) not null,
     id int auto_increment
         primary key,
-    isActive tinyint not null,
     name varchar(200) charset utf8mb3 not null,
     occupation varchar(100) charset utf8mb3 null,
     birthdate date not null,

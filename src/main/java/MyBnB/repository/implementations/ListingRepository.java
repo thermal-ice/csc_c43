@@ -2,9 +2,12 @@ package MyBnB.repository.implementations;
 
 import MyBnB.controller.ListingController;
 import MyBnB.models.basic.Listing;
+import MyBnB.models.composite.ListingWithAddress;
 import MyBnB.models.composite.ListingWithDistanceAndPrice;
+import MyBnB.models.rowmappers.ListingWithAddressMapper;
 import MyBnB.models.rowmappers.ListingWithDistanceAndPriceMapper;
 import MyBnB.repository.interfaces.IListingRepository;
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -36,9 +39,9 @@ public class ListingRepository implements IListingRepository {
 
   @Override
   public void addListing(Listing newListing) {
-    jdbcTemplate.update("INSERT INTO Listing (type, latitude, longitude, addressID, hostID) " +
-        "values (?,?,?,?,?);",
-        newListing.getType(),newListing.getLatitude(),newListing.getLongitude(),newListing.getAddressID(),
+    jdbcTemplate.update("INSERT INTO Listing (type, latitude, longitude, hostID) " +
+        "values (?,?,?,?);",
+        newListing.getType(),newListing.getLatitude(),newListing.getLongitude(),
         newListing.getHostID());
   }
 
@@ -49,11 +52,10 @@ public class ListingRepository implements IListingRepository {
 
   @Override
   public void updateListing(Listing updatedListing) {
-    jdbcTemplate.update("UPDATE Listing SET type = ?, latitude=?, longitude=?, addressID=? WHERE id = ?;",
+    jdbcTemplate.update("UPDATE Listing SET type = ?, latitude=?, longitude=? WHERE id = ?;",
         updatedListing.getType(),
         updatedListing.getLatitude(),
         updatedListing.getLongitude(),
-        updatedListing.getAddressID(),
         updatedListing.getId());
   }
 
@@ -77,9 +79,21 @@ public class ListingRepository implements IListingRepository {
         radius);
   }
 
+  private boolean isAlphaNumeric(String str){
+    return str != null && str.matches("^[a-zA-Z0-9]*$");
+  }
 
-
-
+  @Override
+  public List<ListingWithAddress> getListingsByPostalCode(String postalCode) {
+    String postalCodeWithoutSpace = postalCode.replaceAll(" ", "");
+    if (!isAlphaNumeric(postalCodeWithoutSpace) || postalCodeWithoutSpace.length() != 6){
+      return new ArrayList<>();
+    }
+    String postalCodeFSA = postalCodeWithoutSpace.substring(0,3);
+    return jdbcTemplate.query("Select * from Address inner join Listing L on Address.listingID = L.id Where postalCode like CONCAT(?,'%');",
+        new ListingWithAddressMapper(),
+        postalCodeFSA);
+  }
 
 
 }

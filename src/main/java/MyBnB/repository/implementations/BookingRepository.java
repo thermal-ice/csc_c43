@@ -1,10 +1,13 @@
 package MyBnB.repository.implementations;
 
+import MyBnB.models.basic.Address;
 import MyBnB.models.basic.Booking;
 import MyBnB.repository.interfaces.IBookingRepository;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -54,26 +57,26 @@ public class BookingRepository implements IBookingRepository {
   }
 
   @Override
-  public List<Booking> getAllBookingsWithinRange(LocalDate startDate, LocalDate endDate, String sortBy) {
-    // TODO change to its total number instead of all bookings
-    String getAllBookingsQuery = "SELECT B.*\n" +
+  public Integer getAllBookingsWithinRange(LocalDate startDate, LocalDate endDate, String city, String postalCode) {
+    System.out.println(city + postalCode);
+
+    String getAllBookingsQuery = "SELECT COUNT(*)\n" +
             "FROM Bookings B\n" +
             "INNER JOIN Address A ON B.listingID = A.listingID\n" +
             "WHERE (startDate BETWEEN ? AND ?) AND\n" +
             "      (endDate BETWEEN ? AND ?)\n";
-    switch (sortBy) {
-      case "city":
-        return jdbcTemplate.query(getAllBookingsQuery +  "ORDER BY A.city;",
-                       new BeanPropertyRowMapper<>(Booking.class),
-                startDate, endDate, startDate, endDate);
-      case "postalCode":
-        return jdbcTemplate.query(getAllBookingsQuery + "ORDER BY A.postalCode;",
-                        new BeanPropertyRowMapper<>(Booking.class),
-                startDate, endDate, startDate, endDate);
-      default:
-        throw new IllegalArgumentException("Invalid sorting method: " + sortBy);
+    if (city != null && postalCode != null) {
+      getAllBookingsQuery += " AND A." + Address.COL.CITY + " = '" + city + "' AND A." + Address.COL.POSTAL_CODE + " = '" + postalCode + "';";
+    } else if (city != null) {
+      getAllBookingsQuery += " AND A." + Address.COL.CITY + " = '" + city + "';";
+    } else if (postalCode != null) {
+      getAllBookingsQuery += " AND A." + Address.COL.POSTAL_CODE + " = '" + postalCode + "';";
+    } else {
+      getAllBookingsQuery += ";";
     }
-
+    System.out.println(getAllBookingsQuery + "\n");
+    return jdbcTemplate.queryForObject(getAllBookingsQuery,
+            Integer.class, startDate, endDate, startDate, endDate);
   }
 
 }

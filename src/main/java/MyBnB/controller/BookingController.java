@@ -6,6 +6,8 @@ import MyBnB.repository.implementations.BookingRepository;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,10 +36,11 @@ public class BookingController {
   }
 
   @GetMapping("/allWithinRange")
-  public List<Booking> getAllBookingsWithinRange(@RequestParam("start-date") LocalDate startDate,
+  public Integer getAllBookingsWithinRange(@RequestParam("start-date") LocalDate startDate,
                                                  @RequestParam("end-date") LocalDate endDate,
-                                                 @RequestParam("sort") String sortBy) {
-    return bookingRepository.getAllBookingsWithinRange(startDate, endDate, sortBy);
+                                                 @RequestParam(value = "sort", required = false) String city,
+                                                 @RequestParam(value = "postal-code", required = false) String postalCode) {
+    return bookingRepository.getAllBookingsWithinRange(startDate, endDate, city, postalCode);
   }
 
 }

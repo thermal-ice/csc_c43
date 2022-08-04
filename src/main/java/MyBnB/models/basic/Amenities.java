@@ -1,6 +1,18 @@
 package MyBnB.models.basic;
 
 public class Amenities {
+  public enum COL {
+    NAME("name"),
+    TYPE("type");
+    private String value;
+    COL (final String value) {
+      this.value = value;
+    }
+    @Override
+    public String toString() {
+      return value;
+    }
+  }
   private String name;
   private String type;
 

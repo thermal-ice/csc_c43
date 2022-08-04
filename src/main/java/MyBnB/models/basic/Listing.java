@@ -35,7 +35,6 @@ public class Listing {
   private String type;
   private double latitude;
   private double longitude;
-  private int addressID;
   private int hostID;
 
   public int getId() {
@@ -70,13 +69,6 @@ public class Listing {
     this.longitude = longitude;
   }
 
-  public int getAddressID() {
-    return addressID;
-  }
-
-  public void setAddressID(int addressID) {
-    this.addressID = addressID;
-  }
 
   public int getHostID() {
     return hostID;
@@ -98,7 +90,6 @@ public class Listing {
         ", type='" + type + '\'' +
         ", latitude=" + latitude +
         ", longitude=" + longitude +
-        ", addressID=" + addressID +
         ", hostID=" + hostID +
         '}';
   }

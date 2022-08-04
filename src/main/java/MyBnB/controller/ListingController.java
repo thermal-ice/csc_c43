@@ -1,6 +1,7 @@
 package MyBnB.controller;
 
 import MyBnB.models.basic.Host;
+import MyBnB.models.composite.ListingWithAddress;
 import MyBnB.repository.implementations.HostRepository;
 import MyBnB.models.basic.Amenities;
 import MyBnB.models.basic.Listing;
@@ -95,6 +96,12 @@ public class ListingController {
                                                                         @RequestParam(value = "radius", defaultValue = "50")  double radius,
                                                                         @RequestParam(value = "OrderBy") OrderBy orderBy){
     return listingRepository.getListingsWithinDistance(latitude,longitude,radius, orderBy);
+  }
+
+
+  @GetMapping("/getAdjacentPostalCodes")
+  public List<ListingWithAddress> getAllListingsWithAdjacentPostalCodes(@RequestParam("postalcode") String postalcode){
+    return listingRepository.getListingsByPostalCode(postalcode);
   }
 
 

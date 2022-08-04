@@ -2,6 +2,8 @@ package MyBnB.repository.implementations;
 
 import MyBnB.models.basic.Booking;
 import MyBnB.repository.interfaces.IBookingRepository;
+
+import java.time.LocalDate;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -51,6 +53,15 @@ public class BookingRepository implements IBookingRepository {
         bookingID);
   }
 
-
+  @Override
+  public List<Booking> getAllBookingsWithinRange(LocalDate startDate, LocalDate endDate) {
+    return jdbcTemplate.query("SELECT B.*\n" +
+                    "FROM Bookings B\n" +
+                    "INNER JOIN Address A ON B.listingID = A.listingID\n" +
+                    "WHERE (startDate BETWEEN ? AND ?) AND\n" +
+                    "      (endDate BETWEEN ? AND ?)\n" +
+                    "ORDER BY A.city;",new BeanPropertyRowMapper<>(Booking.class),
+            startDate, endDate, startDate, endDate);
+  }
 
 }

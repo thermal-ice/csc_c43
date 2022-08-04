@@ -3,6 +3,8 @@ package MyBnB.controller;
 import MyBnB.models.basic.Booking;
 import MyBnB.models.basic.Listing;
 import MyBnB.repository.implementations.BookingRepository;
+
+import java.time.LocalDate;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -29,6 +31,12 @@ public class BookingController {
   @PostMapping("/add")
   public void addBooking(@RequestBody Booking newBooking) {
     bookingRepository.addBooking(newBooking);
+  }
+
+  @GetMapping("allWithinRange")
+  public List<Booking> getAllBookingsWithinRange(@RequestParam("startDate") LocalDate startDate,
+                                                 @RequestParam("endDate") LocalDate endDate) {
+    return bookingRepository.getAllBookingsWithinRange(startDate, endDate);
   }
 
 }

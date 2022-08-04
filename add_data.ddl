@@ -12,15 +12,15 @@ insert into Host values (1);
 insert into Host values (4);
 
 /* Two houses. Fix addressID. */
-insert into Listing (id, type, latitude, longitude, addressID, hostID)
+insert into Listing (id, type, latitude, longitude, hostID)
 values
-    (1, 'Apartment', '22.784762', '-32.100073', 0, 1),
-    (2, 'House', '88.795449', '-53.210433', 0, 1),
-    (3, 'House', '65.795449', '-23.210433', 0, 1),
-    (4, 'Secondary Unit', '34.794959', '-79.210433', 0, 1),
-    (5, 'Unique space', '43.795959', '-99.210433', 0, 4),
-    (6, 'Bed and breakfast', '43.795959', '-82.220433', 0, 4),
-    (7, 'Bed and breakfast', '55.795959', '-80.220433', 0, 4);
+    (1, 'Apartment', '22.784762', '-32.100073', 1),
+    (2, 'House', '88.795449', '-53.210433',  1),
+    (3, 'House', '65.795449', '-23.210433', 1),
+    (4, 'Secondary Unit', '34.794959', '-79.210433', 1),
+    (5, 'Unique space', '43.795959', '-99.210433', 4),
+    (6, 'Bed and breakfast', '43.795959', '-82.220433', 4),
+    (7, 'Bed and breakfast', '55.795959', '-80.220433', 4);
 
 insert into Amenities (type, name)
 values
@@ -206,7 +206,7 @@ values
     (140.10, '2022-11-05', '2022-11-03', 6),
     (45.50, '2022-11-05', '2022-11-03', 7);
 
-insert into Bookings (id, renterID, hostID, listingID, endDate, startDate, status)
+insert into Bookings (id, renterID, hostID, availabilityID, endDate, startDate, status)
 values
   (10, 2, 1, 3, '2022-02-05', '2022-02-03', 'RESOLVED'),
   (15, 3, 1, 3, '2022-05-08', '2022-05-01', 'RESOLVED'),

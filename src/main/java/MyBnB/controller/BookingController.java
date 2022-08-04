@@ -33,10 +33,11 @@ public class BookingController {
     bookingRepository.addBooking(newBooking);
   }
 
-  @GetMapping("allWithinRange")
-  public List<Booking> getAllBookingsWithinRange(@RequestParam("startDate") LocalDate startDate,
-                                                 @RequestParam("endDate") LocalDate endDate) {
-    return bookingRepository.getAllBookingsWithinRange(startDate, endDate);
+  @GetMapping("/allWithinRange")
+  public List<Booking> getAllBookingsWithinRange(@RequestParam("start-date") LocalDate startDate,
+                                                 @RequestParam("end-date") LocalDate endDate,
+                                                 @RequestParam("sort") String sortBy) {
+    return bookingRepository.getAllBookingsWithinRange(startDate, endDate, sortBy);
   }
 
 }

@@ -14,5 +14,5 @@ public interface IBookingRepository {
   public Booking getBooking(int bookingID);
   public void addBooking(Booking newBooking);
   public void deleteBooking(int bookingID);
-  public List<Booking> getAllBookingsWithinRange(LocalDate startDate, LocalDate endDate);
+  public List<Booking> getAllBookingsWithinRange(LocalDate startDate, LocalDate endDate, String sortBy);
 }

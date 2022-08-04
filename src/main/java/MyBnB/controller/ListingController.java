@@ -51,20 +51,15 @@ public class ListingController {
   }
 
   @PostMapping("/delete")
-  public ResponseEntity<String> deleteListing(@RequestParam("listingId")  int listingID, @RequestParam("hostId")  int hostId){
+  public ResponseEntity<String> deleteListing(@RequestParam("listingId")  int listingID){
     System.out.println(listingID);
-    System.out.println(hostId);
 
     Listing existingListing = listingRepository.getListing(listingID);
-    // TODO: null pointer exception if host doesn't exist... fix it
-    Host existingHost = hostRepository.getHost(hostId);
 
-    if (existingListing == null || existingHost == null){
-      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Listing or Host with this ID doesn't exist!");
+    if (existingListing == null){
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Listing with this ID doesn't exist!");
     }
-    if(existingListing.getHostID() != hostId){
-      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid permissions: the hostID doesn't match this listing's ID!");
-    }
+    // FIXME: invalid permissions if host id doesn't match with listing id
     listingRepository.deleteListing(listingID);
     return ResponseEntity.status(HttpStatus.OK).body("Success!");
   }
@@ -73,10 +68,9 @@ public class ListingController {
   public ResponseEntity<String> updateListing(@RequestBody Listing updatedListing){
     System.out.println(updatedListing);
     Listing existingListing= listingRepository.getListing(updatedListing.getId());
-    Host existingHost = hostRepository.getHost(updatedListing.getHostID());
 
-    if (existingListing == null || existingHost == null) {
-      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Listing or Host with this ID doesn't exist!");
+    if (existingListing == null) {
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Listing with this ID doesn't exist!");
     }
     if(existingListing.getHostID() != updatedListing.getHostID()){
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid permissions: the hostID doesn't match this listing's ID!");

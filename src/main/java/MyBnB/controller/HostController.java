@@ -2,6 +2,7 @@ package MyBnB.controller;
 
 import MyBnB.models.basic.Host;
 import MyBnB.repository.implementations.HostRepository;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,7 +14,9 @@ public class HostController {
     @Autowired
     HostRepository hostRepository;
 
+
     @GetMapping("/getAllHosts")
+    @Tag(name="stuff")
     public List<Host> getAllHosts() {
         return hostRepository.getAllHosts();
     }

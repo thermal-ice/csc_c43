@@ -1,14 +1,11 @@
 package MyBnB.controller;
 
 import MyBnB.models.basic.Booking;
+import MyBnB.models.basic.Listing;
 import MyBnB.repository.implementations.BookingRepository;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 //TODO test these endpoints
 
@@ -29,6 +26,9 @@ public class BookingController {
     return bookingRepository.getBooking(id);
   }
 
-
+  @PostMapping("/add")
+  public void addBooking(@RequestBody Booking newBooking) {
+    bookingRepository.addBooking(newBooking);
+  }
 
 }

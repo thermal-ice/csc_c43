@@ -28,7 +28,7 @@ public class BookingRepository implements IBookingRepository {
           queryForObject("SELECT * FROM Booking WHERE id=?;",
           new BeanPropertyRowMapper(Booking.class),
           bookingID);
-    }catch (EmptyResultDataAccessException e){
+    } catch (EmptyResultDataAccessException e){
       return null;
     }
   }
@@ -54,14 +54,26 @@ public class BookingRepository implements IBookingRepository {
   }
 
   @Override
-  public List<Booking> getAllBookingsWithinRange(LocalDate startDate, LocalDate endDate) {
-    return jdbcTemplate.query("SELECT B.*\n" +
-                    "FROM Bookings B\n" +
-                    "INNER JOIN Address A ON B.listingID = A.listingID\n" +
-                    "WHERE (startDate BETWEEN ? AND ?) AND\n" +
-                    "      (endDate BETWEEN ? AND ?)\n" +
-                    "ORDER BY A.city;",new BeanPropertyRowMapper<>(Booking.class),
-            startDate, endDate, startDate, endDate);
+  public List<Booking> getAllBookingsWithinRange(LocalDate startDate, LocalDate endDate, String sortBy) {
+    // TODO change to its total number instead of all bookings
+    String getAllBookingsQuery = "SELECT B.*\n" +
+            "FROM Bookings B\n" +
+            "INNER JOIN Address A ON B.listingID = A.listingID\n" +
+            "WHERE (startDate BETWEEN ? AND ?) AND\n" +
+            "      (endDate BETWEEN ? AND ?)\n";
+    switch (sortBy) {
+      case "city":
+        return jdbcTemplate.query(getAllBookingsQuery +  "ORDER BY A.city;",
+                       new BeanPropertyRowMapper<>(Booking.class),
+                startDate, endDate, startDate, endDate);
+      case "postalCode":
+        return jdbcTemplate.query(getAllBookingsQuery + "ORDER BY A.postalCode;",
+                        new BeanPropertyRowMapper<>(Booking.class),
+                startDate, endDate, startDate, endDate);
+      default:
+        throw new IllegalArgumentException("Invalid sorting method: " + sortBy);
+    }
+
   }
 
 }

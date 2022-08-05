@@ -104,6 +104,21 @@ public class ListingController {
     return listingRepository.getListingsByPostalCode(postalcode);
   }
 
+  @GetMapping("/getByAddressLine")
+  public List<ListingWithAddress> getAllListingsWithMatchingAddressLine(@RequestParam("addressLine") String addressLine){
+    return listingRepository.getListingsByAddressLine(addressLine);
+  }
+
+  @GetMapping("/getByPriceRange")
+  public List<Listing> getAllListingsWithMatchingAddressLine(@RequestParam("minPrice") double minPrice,
+                                                                        @RequestParam("maxPrice") double maxPrice){
+    return listingRepository.getListingsWithinPriceRange(minPrice, maxPrice);
+  }
+
+
+
+
+
 
 
 

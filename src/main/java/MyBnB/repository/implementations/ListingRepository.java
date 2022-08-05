@@ -95,5 +95,20 @@ public class ListingRepository implements IListingRepository {
         postalCodeFSA);
   }
 
+  @Override
+  public List<ListingWithAddress> getListingsByAddressLine(String addressLine) {
+    return jdbcTemplate.query("Select * from Address inner join Listing L on Address.listingID = L.id Where addressLine like CONCAT('%',?,'%');",
+        new ListingWithAddressMapper(),
+        addressLine);
+  }
+
+  @Override
+  public List<Listing> getListingsWithinPriceRange(double minPrice, double maxPrice) {
+    return jdbcTemplate.query("Select distinct Listing.* From Listing inner join Availabilities A on Listing.id = A.listingID Where pricePerNight between ? AND ?;",
+        new BeanPropertyRowMapper<>(Listing.class),
+        minPrice,
+        maxPrice);
+  }
+
 
 }

@@ -1,12 +1,17 @@
 package MyBnB.repository.implementations;
 
 import MyBnB.controller.ListingController;
+import MyBnB.models.basic.Address;
 import MyBnB.models.basic.Listing;
+import MyBnB.models.composite.CityWithListingCount;
 import MyBnB.models.composite.ListingWithAddress;
 import MyBnB.models.composite.ListingWithDistanceAndPrice;
+import MyBnB.models.rowmappers.CityWithListingCountMapper;
 import MyBnB.models.rowmappers.ListingWithAddressMapper;
 import MyBnB.models.rowmappers.ListingWithDistanceAndPriceMapper;
 import MyBnB.repository.interfaces.IListingRepository;
+
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -95,5 +100,10 @@ public class ListingRepository implements IListingRepository {
         postalCodeFSA);
   }
 
+  @Override
+  public List<CityWithListingCount> getCountListingByCity() {
+    String query = "SELECT city, COUNT(*) as count FROM Address A INNER JOIN Listing L on A.listingID = L.id GROUP BY city ORDER BY count DESC;";
+    return jdbcTemplate.query(query, new CityWithListingCountMapper());
+  }
 
 }

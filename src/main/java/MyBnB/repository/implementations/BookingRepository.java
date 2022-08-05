@@ -57,25 +57,22 @@ public class BookingRepository implements IBookingRepository {
   }
 
   @Override
-  public Integer getAllBookingsWithinRange(LocalDate startDate, LocalDate endDate, String city, String postalCode) {
+  public Integer getCountBookingsWithinRange(LocalDate startDate, LocalDate endDate, String city, String postalCode) {
     System.out.println(city + postalCode);
 
-    String getAllBookingsQuery = "SELECT COUNT(*)\n" +
+    String query = "SELECT COUNT(*)\n" +
             "FROM Bookings B\n" +
             "INNER JOIN Address A ON B.listingID = A.listingID\n" +
             "WHERE (startDate BETWEEN ? AND ?) AND\n" +
             "      (endDate BETWEEN ? AND ?)\n";
-    if (city != null && postalCode != null) {
-      getAllBookingsQuery += " AND A." + Address.Field.CITY + " = '" + city + "' AND A." + Address.Field.POSTAL_CODE + " = '" + postalCode + "';";
-    } else if (city != null) {
-      getAllBookingsQuery += " AND A." + Address.Field.CITY + " = '" + city + "';";
-    } else if (postalCode != null) {
-      getAllBookingsQuery += " AND A." + Address.Field.POSTAL_CODE + " = '" + postalCode + "';";
-    } else {
-      getAllBookingsQuery += ";";
-    }
-    System.out.println(getAllBookingsQuery + "\n");
-    return jdbcTemplate.queryForObject(getAllBookingsQuery,
+    if (city != null)
+      query += " AND A." + Address.Field.CITY + " = '" + city + "'";
+    if (postalCode != null)
+      query += " AND A." + Address.Field.POSTAL_CODE + " = '" + postalCode + "'";
+    query += ";";
+
+    System.out.println(query + "\n");
+    return jdbcTemplate.queryForObject(query,
             Integer.class, startDate, endDate, startDate, endDate);
   }
 

@@ -15,5 +15,5 @@ public interface IBookingRepository {
   public Booking getBooking(int bookingID);
   public void addBooking(Booking newBooking);
   public void deleteBooking(int bookingID);
-  public Integer getAllBookingsWithinRange(LocalDate startDate, LocalDate endDate, String city, String postalCode);
+  public Integer getCountBookingsWithinRange(LocalDate startDate, LocalDate endDate, String city, String postalCode);
 }

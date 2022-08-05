@@ -35,12 +35,12 @@ public class BookingController {
     bookingRepository.addBooking(newBooking);
   }
 
-  @GetMapping("/allWithinRange")
-  public Integer getAllBookingsWithinRange(@RequestParam("start-date") LocalDate startDate,
+  @GetMapping("/count")
+  public Integer getCountBookingsWithinRange(@RequestParam("start-date") LocalDate startDate,
                                                  @RequestParam("end-date") LocalDate endDate,
                                                  @RequestParam(value = "sort", required = false) String city,
                                                  @RequestParam(value = "postal-code", required = false) String postalCode) {
-    return bookingRepository.getAllBookingsWithinRange(startDate, endDate, city, postalCode);
+    return bookingRepository.getCountBookingsWithinRange(startDate, endDate, city, postalCode);
   }
 
 }

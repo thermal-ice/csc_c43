@@ -11,5 +11,5 @@ public interface IUserRepository {
     public void addUser(User user);
     public User getUser(int id);
     public void deleteUser(int id);
-    public List<User> getAllUsersByStatus (User.UserStatus status);
+    public List<User> getAllUsersByStatus ();
 }

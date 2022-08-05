@@ -66,11 +66,11 @@ public class BookingRepository implements IBookingRepository {
             "WHERE (startDate BETWEEN ? AND ?) AND\n" +
             "      (endDate BETWEEN ? AND ?)\n";
     if (city != null && postalCode != null) {
-      getAllBookingsQuery += " AND A." + Address.COL.CITY + " = '" + city + "' AND A." + Address.COL.POSTAL_CODE + " = '" + postalCode + "';";
+      getAllBookingsQuery += " AND A." + Address.Field.CITY + " = '" + city + "' AND A." + Address.Field.POSTAL_CODE + " = '" + postalCode + "';";
     } else if (city != null) {
-      getAllBookingsQuery += " AND A." + Address.COL.CITY + " = '" + city + "';";
+      getAllBookingsQuery += " AND A." + Address.Field.CITY + " = '" + city + "';";
     } else if (postalCode != null) {
-      getAllBookingsQuery += " AND A." + Address.COL.POSTAL_CODE + " = '" + postalCode + "';";
+      getAllBookingsQuery += " AND A." + Address.Field.POSTAL_CODE + " = '" + postalCode + "';";
     } else {
       getAllBookingsQuery += ";";
     }

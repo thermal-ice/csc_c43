@@ -5,19 +5,15 @@ import java.util.Objects;
 import net.bytebuddy.asm.Advice;
 
 public class Availabilities {
-  public enum COL {
+  public enum Field {
     PRICE_PER_NIGHT("pricePerNight"),
     END_DATE("endDate"),
     START_DATE("startDate"),
     LISTING_ID("listingID");
-    private String value;
-    COL (final String value) {
-      this.value = value;
-    }
+    private final String value;
+    Field (final String value) { this.value = value; }
     @Override
-    public String toString() {
-      return value;
-    }
+    public String toString() { return this.value; }
   }
   private LocalDate startDate;
   private int listingID;

@@ -32,10 +32,7 @@ public class UserController {
     }
 
     @GetMapping("/getAllUsers")
-    public List<User> getAllUsers(@RequestParam Optional<User.UserStatus> status) {
-        if (status.isPresent()){
-          return userRepository.getAllUsersByStatus(status.get());
-        }
+    public List<User> getAllUsers() {
         System.out.println("Getting all users....");
         return userRepository.getAllUsers();
     }

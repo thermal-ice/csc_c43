@@ -3,6 +3,17 @@ package MyBnB.models.basic;
 import java.time.LocalDate;
 
 public class PaymentInfo {
+  public enum Field {
+    ID("id"),
+    CARD_NUMBER("cardNumber"),
+    CARD_NAME("cardName"),
+    EXPIRY_DATE("expiryDate"),
+    RENTER_ID("renterID");
+    private final String value;
+    Field (final String value) { this.value = value; }
+    @Override
+    public String toString() { return this.value; }
+  }
 
   private int id;
   private String cardNumber;

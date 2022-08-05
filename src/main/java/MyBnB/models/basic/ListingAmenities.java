@@ -1,6 +1,14 @@
 package MyBnB.models.basic;
 
 public class ListingAmenities {
+  public enum Field {
+    LISTING_ID("listingID"),
+    AMENITY("amenity");
+    private final String value;
+    Field (final String value) { this.value = value; }
+    @Override
+    public String toString() { return this.value; }
+  }
 
   private int listingID;
   private String amenity;

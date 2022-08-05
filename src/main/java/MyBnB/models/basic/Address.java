@@ -1,6 +1,18 @@
 package MyBnB.models.basic;
 
 public class Address {
+  public enum Field {
+    LISTING_ID("listingID"),
+    ADDRESS_LINE("addressLine"),
+    CITY("city"),
+    PROVINCE_TERRITORY("province_territory"),
+    POSTAL_CODE("postalCode"),
+    COUNTRY("country");
+    private final String value;
+    Field (final String value) { this.value = value; }
+    @Override
+    public String toString() { return this.value; }
+  }
 
   private int listingID;
   private String addressLine;

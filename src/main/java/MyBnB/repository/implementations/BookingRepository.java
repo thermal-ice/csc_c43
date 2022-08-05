@@ -1,10 +1,13 @@
 package MyBnB.repository.implementations;
 
+import MyBnB.models.basic.Address;
 import MyBnB.models.basic.Booking;
 import MyBnB.repository.interfaces.IBookingRepository;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -54,26 +57,23 @@ public class BookingRepository implements IBookingRepository {
   }
 
   @Override
-  public List<Booking> getAllBookingsWithinRange(LocalDate startDate, LocalDate endDate, String sortBy) {
-    // TODO change to its total number instead of all bookings
-    String getAllBookingsQuery = "SELECT B.*\n" +
+  public Integer getCountBookingsWithinRange(LocalDate startDate, LocalDate endDate, String city, String postalCode) {
+    System.out.println(city + postalCode);
+
+    String query = "SELECT COUNT(*)\n" +
             "FROM Bookings B\n" +
             "INNER JOIN Address A ON B.listingID = A.listingID\n" +
             "WHERE (startDate BETWEEN ? AND ?) AND\n" +
             "      (endDate BETWEEN ? AND ?)\n";
-    switch (sortBy) {
-      case "city":
-        return jdbcTemplate.query(getAllBookingsQuery +  "ORDER BY A.city;",
-                       new BeanPropertyRowMapper<>(Booking.class),
-                startDate, endDate, startDate, endDate);
-      case "postalCode":
-        return jdbcTemplate.query(getAllBookingsQuery + "ORDER BY A.postalCode;",
-                        new BeanPropertyRowMapper<>(Booking.class),
-                startDate, endDate, startDate, endDate);
-      default:
-        throw new IllegalArgumentException("Invalid sorting method: " + sortBy);
-    }
+    if (city != null)
+      query += " AND A." + Address.Field.CITY + " = '" + city + "'";
+    if (postalCode != null)
+      query += " AND A." + Address.Field.POSTAL_CODE + " = '" + postalCode + "'";
+    query += ";";
 
+    System.out.println(query + "\n");
+    return jdbcTemplate.queryForObject(query,
+            Integer.class, startDate, endDate, startDate, endDate);
   }
 
 }

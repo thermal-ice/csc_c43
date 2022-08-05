@@ -4,6 +4,7 @@ import MyBnB.models.basic.Booking;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 import net.bytebuddy.asm.Advice;
 import org.springframework.stereotype.Repository;
@@ -14,5 +15,5 @@ public interface IBookingRepository {
   public Booking getBooking(int bookingID);
   public void addBooking(Booking newBooking);
   public void deleteBooking(int bookingID);
-  public List<Booking> getAllBookingsWithinRange(LocalDate startDate, LocalDate endDate, String sortBy);
+  public Integer getCountBookingsWithinRange(LocalDate startDate, LocalDate endDate, String city, String postalCode);
 }

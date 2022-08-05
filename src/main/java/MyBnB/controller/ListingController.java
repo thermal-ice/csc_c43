@@ -1,6 +1,7 @@
 package MyBnB.controller;
 
 import MyBnB.models.basic.Host;
+import MyBnB.models.composite.CityWithListingCount;
 import MyBnB.models.composite.ListingWithAddress;
 import MyBnB.repository.implementations.HostRepository;
 import MyBnB.models.basic.Amenities;
@@ -9,6 +10,8 @@ import MyBnB.models.basic.ListingAmenities;
 import MyBnB.models.composite.ListingWithDistanceAndPrice;
 import MyBnB.repository.implementations.ListingAmenitiesRepository;
 import MyBnB.repository.implementations.ListingRepository;
+
+import java.time.LocalDate;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -37,8 +40,6 @@ public class ListingController {
     PRICE_ASC,
     PRICE_DESC
   }
-  @Autowired
-  HostRepository hostRepository;
 
   @GetMapping("/all")
   public List<Listing> getAllListings() {
@@ -124,4 +125,9 @@ public class ListingController {
 
 
 
+  @GetMapping("/countByCity")
+  public List<CityWithListingCount> getCountListingByCity() {
+    return listingRepository.getCountListingByCity();
+  }
+  // TODO: do this for country +
 }

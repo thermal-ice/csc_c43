@@ -2,6 +2,7 @@ package MyBnB.repository.interfaces;
 
 import MyBnB.controller.ListingController;
 import MyBnB.models.basic.Listing;
+import MyBnB.models.composite.CityWithListingCount;
 import MyBnB.models.composite.ListingWithAddress;
 import MyBnB.models.composite.ListingWithDistanceAndPrice;
 import java.util.List;
@@ -19,4 +20,5 @@ public interface IListingRepository {
   public List<ListingWithAddress> getListingsByPostalCode(String postalCode);
   public List<ListingWithAddress> getListingsByAddressLine(String addressLine);
   public List<Listing> getListingsWithinPriceRange(double minPrice, double maxPrice);
+  public List<CityWithListingCount> getCountListingByCity();
 }

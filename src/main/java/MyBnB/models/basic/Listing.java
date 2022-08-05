@@ -16,17 +16,24 @@ public class Listing {
     UNIQUE_SPACE("Unique space"),
     BED_AND_BREAKFAST("Bed and breakfast"),
     CABIN("Cabin");
-
     private final String typeString;
     ListingType(String type){
       this.typeString = type;
     }
-
-    public String getType(){
-      return this.typeString;
-    }
-
+    public String getType() { return this.typeString; }
   }
+  public enum Field {
+    ID("id"),
+    TYPE("type"),
+    LATITUDE("latitude"),
+    LONGITUDE("longitude"),
+    HOST_ID("hostID");
+    private final String value;
+    Field (final String value) { this.value = value; }
+    @Override
+    public String toString() { return this.value; }
+  }
+
 
 //  @Schema(hidden = true)
   //This works for adding a new Listing, but not for updating an existing listing.

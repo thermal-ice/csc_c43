@@ -45,7 +45,7 @@ public class UserRepository implements IUserRepository {
     public void addUser(User user) {
         jdbcTemplate.update("insert into User values (?, ?, ?, ?, ?, ?);",
                 user.getId(), user.getName(), user.getBirthdate(),
-                user.getOccupation(), user.getSin(), user.getIsActive());
+                user.getOccupation(), user.getSin());
     }
 
     @Override
@@ -54,9 +54,9 @@ public class UserRepository implements IUserRepository {
     }
 
   @Override
-  public List<User> getAllUsersByStatus(User.UserStatus status) {
+  public List<User> getAllUsersByStatus() {
     return jdbcTemplate.query("select * from User where isActive=?;",
-        new BeanPropertyRowMapper(User.class), status.isActive());
+        new BeanPropertyRowMapper(User.class));
   }
 }
 

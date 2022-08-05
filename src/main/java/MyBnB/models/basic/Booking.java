@@ -3,6 +3,19 @@ package MyBnB.models.basic;
 import java.time.LocalDate;
 
 public class Booking {
+  public enum Field {
+    ID("id"),
+    RENTER_ID("renterID"),
+    HOST_ID("hostID"),
+    AVAILABILITY_ID("availabilityID"),
+    END_DATE("endDate"),
+    START_DATE("startDate"),
+    STATUS("status");
+    private final String value;
+    Field (final String value) { this.value = value; }
+    @Override
+    public String toString() { return this.value; }
+  }
 
   private int id;
   private int renterID;

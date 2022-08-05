@@ -101,7 +101,6 @@ public class ListingRepository implements IListingRepository {
   }
 
   @Override
-<<<<<<< HEAD
   public List<ListingWithAddress> getListingsByAddressLine(String addressLine) {
     return jdbcTemplate.query("Select * from Address inner join Listing L on Address.listingID = L.id Where addressLine like CONCAT('%',?,'%');",
         new ListingWithAddressMapper(),
@@ -116,11 +115,9 @@ public class ListingRepository implements IListingRepository {
         maxPrice);
   }
 
-=======
   public List<CityWithListingCount> getCountListingByCity() {
     String query = "SELECT city, COUNT(*) as count FROM Address A INNER JOIN Listing L on A.listingID = L.id GROUP BY city ORDER BY count DESC;";
     return jdbcTemplate.query(query, new CityWithListingCountMapper());
   }
->>>>>>> 0bce6525b4e7f17864edcbf66efa8f429aee0d29
 
 }

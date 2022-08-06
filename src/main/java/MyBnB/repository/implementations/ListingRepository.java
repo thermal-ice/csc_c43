@@ -1,19 +1,19 @@
 package MyBnB.repository.implementations;
 
 import MyBnB.controller.ListingController;
-import MyBnB.models.basic.Address;
 import MyBnB.models.basic.Listing;
+import MyBnB.models.basic.Renter;
 import MyBnB.models.composite.CityWithListingCount;
 import MyBnB.models.composite.ListingWithAddress;
 import MyBnB.models.composite.ListingWithDistanceAndPrice;
-import MyBnB.models.rowmappers.CityWithListingCountMapper;
 import MyBnB.models.rowmappers.ListingWithAddressMapper;
 import MyBnB.models.rowmappers.ListingWithDistanceAndPriceMapper;
 import MyBnB.repository.interfaces.IListingRepository;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -115,9 +115,22 @@ public class ListingRepository implements IListingRepository {
         maxPrice);
   }
 
-  public List<CityWithListingCount> getCountListingByCity() {
-    String query = "SELECT city, COUNT(*) as count FROM Address A INNER JOIN Listing L on A.listingID = L.id GROUP BY city ORDER BY count DESC;";
-    return jdbcTemplate.query(query, new CityWithListingCountMapper());
+//  public List<CityWithListingCount> getCountListingByCity() {
+//    String query = "SELECT city, COUNT(*) as count FROM Address A INNER JOIN Listing L on A.listingID = L.id GROUP BY city ORDER BY count DESC;";
+//    return jdbcTemplate.query(query, new CityWithListingCountMapper());
+//  }
+
+  public List<Listing> getAllListingsByAmenities(List<String> amenities) {
+    String query = "SELECT L.id FROM Listing L ";
+    if (amenities != null) {
+      for (int i=0; i<amenities.size(); i++) {
+        query += (i == 0) ? "WHERE EXISTS " : "AND EXISTS ";
+        query += "(SELECT * FROM ListingAmenities AS LA WHERE L.id = LA.listingID AND LA.amenity = '" + amenities.get(i) + "') ";
+      }
+    }
+    // if amenities is null then give all listings
+    System.out.println(query);
+    return jdbcTemplate.query(query, new BeanPropertyRowMapper(Listing.class));
   }
 
 }

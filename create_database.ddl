@@ -161,6 +161,7 @@ create table if not exists Review
     revieweeID int not null,
     constraint Review_id_uindex
         unique (id),
+        unique (reviewerID, bookingID),
     constraint Review_Bookings_id_fk
         foreign key (bookingID) references Bookings (id)
             on delete cascade,

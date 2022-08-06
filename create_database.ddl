@@ -51,19 +51,23 @@ create table if not exists Listing
 alter table Listing
     add primary key (id);
 
-create table if not exists Address
+create table Address
 (
-    listingID int auto_increment
-        primary key,
-    country varchar(50) charset utf8mb3 not null,
-    postalCode varchar(10) charset utf8mb3 not null,
-    province_territory varchar(30) charset utf8mb3 not null,
-    city varchar(100) charset utf8mb3 null,
-    addressLine varchar(500) charset utf8mb3 not null,
+    listingID          int                          not null,
+    country            varchar(50) charset utf8mb3  not null,
+    postalCode         varchar(10) charset utf8mb3  not null,
+    province_territory varchar(30) charset utf8mb3  not null,
+    city               varchar(100) charset utf8mb3 null,
+    addressLine        varchar(500) charset utf8mb3 not null,
+    constraint Address_listingID_uindex
+        unique (listingID),
     constraint Address_Listing_id_fk
         foreign key (listingID) references Listing (id)
             on delete cascade
 );
+
+alter table Address
+    add primary key (listingID);
 
 create table if not exists Availabilities
 (

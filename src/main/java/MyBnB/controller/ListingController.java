@@ -15,6 +15,8 @@ import MyBnB.repository.implementations.ListingRepository;
 import MyBnB.services.ListingSearchQueryBuilder;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -115,7 +117,7 @@ public class ListingController {
   }
 
   @GetMapping("/getByPriceRange")
-  public List<Listing> getAllListingsWithMatchingAddressLine(@RequestParam("minPrice") double minPrice,
+  public List<Listing> getAllListingsWithinPriceRange(@RequestParam("minPrice") double minPrice,
                                                                         @RequestParam("maxPrice") double maxPrice){
     return listingRepository.getListingsWithinPriceRange(minPrice, maxPrice);
   }
@@ -140,18 +142,24 @@ public class ListingController {
 
     return listingRepository.getListingByFullSearchQuery(fullQuery);
   }
-
-
-
-
-
-
-
-
-
-  @GetMapping("/countByCity")
-  public List<CityWithListingCount> getCountListingByCity() {
-    return listingRepository.getCountListingByCity();
+  @GetMapping("/getByAmenities")
+  public List<Listing> getAllListingsByAmenities(@RequestParam(value = "amenities", required = false) List<String> amenities) {
+    System.out.println(amenities);
+    return listingRepository.getAllListingsByAmenities(amenities);
   }
+
+
+
+
+
+
+
+
+
+
+//  @GetMapping("/countByCity")
+//  public List<CityWithListingCount> getCountListingByCity() {
+//    return listingRepository.getCountListingByCity();
+//  }
   // TODO: do this for country +
 }

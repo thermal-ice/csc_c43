@@ -187,6 +187,7 @@ create table if not exists UserSearch
 (
     id int auto_increment,
     amenity varchar(50) charset utf8mb3 not null comment 'part of primary key',
+    searchCount int not null,
     constraint UserSearch_id_uindex
             unique (id),
     constraint UserSearch_Amenities_name_fk
@@ -195,3 +196,6 @@ create table if not exists UserSearch
 
 alter table UserSearch
     add primary key (id);
+
+create trigger add_amenity after insert on Amenities for each row
+insert into UserSearch (amenity, searchCount) values (NEW.name, 0);

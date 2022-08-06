@@ -118,6 +118,7 @@ public class ListingRepository implements IListingRepository {
 //    return jdbcTemplate.query(query, new CityWithListingCountMapper());
 //  }
 
+
   public List<Listing> getAllListingsByAmenities(List<String> amenities) {
     String queryToSearch = "SELECT L.id FROM Listing L ";
     String queryToAddUserSearch;
@@ -125,10 +126,9 @@ public class ListingRepository implements IListingRepository {
       for (int i=0; i<amenities.size(); i++) {
         queryToSearch += (i == 0) ? "WHERE EXISTS " : "AND EXISTS ";
         queryToSearch += "(SELECT * FROM ListingAmenities AS LA WHERE L.id = LA.listingID AND LA.amenity = '" + amenities.get(i) + "') ";
-
-        // also insert in search table
-        queryToAddUserSearch = "INSERT INTO UserSearch (amenity) VALUES ('" + amenities.get(i) + "');";
-        jdbcTemplate.update(queryToAddUserSearch);
+        // also update UserSearch table
+        jdbcTemplate.update("UPDATE UserSearch SET searchCount=searchCount+1 WHERE amenity = ?;",
+                amenities.get(i));
       }
     }
     // if amenities is null then give all listings

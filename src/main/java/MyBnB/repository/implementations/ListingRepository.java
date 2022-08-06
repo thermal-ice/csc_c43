@@ -69,6 +69,7 @@ public class ListingRepository implements IListingRepository {
     String query = "SELECT *,SQRT(POW(? - latitude, 2) + POW(? - longitude,2)) as distance FROM Listing L INNER JOIN (SELECT listingID, MAX(pricePerNight) as price From Availabilities GROUP BY listingID) as A ON A.listingID = L.id WHERE SQRT(POW(? - latitude, 2) + POW(? - longitude,2)) < ? ";
 
     String endOfQuery = switch (orderBy) {
+      case NONE -> ";";
       case DISTANCE -> "ORDER BY distance ASC;";
       case PRICE_ASC -> "ORDER BY price ASC;";
       case PRICE_DESC -> "ORDER BY price DESC;";
@@ -118,6 +119,10 @@ public class ListingRepository implements IListingRepository {
   public List<CityWithListingCount> getCountListingByCity() {
     String query = "SELECT city, COUNT(*) as count FROM Address A INNER JOIN Listing L on A.listingID = L.id GROUP BY city ORDER BY count DESC;";
     return jdbcTemplate.query(query, new CityWithListingCountMapper());
+  }
+
+  public List<Listing> getListingByFullSearchQuery(String sqlQuery){
+    return jdbcTemplate.query(sqlQuery,new BeanPropertyRowMapper<>(Listing.class));
   }
 
 }

@@ -1,5 +1,6 @@
 package MyBnB.controller;
 
+import MyBnB.models.basic.Booking;
 import MyBnB.models.basic.Host;
 import MyBnB.models.composite.CityWithListingCount;
 import MyBnB.models.composite.ListingWithAddress;
@@ -11,9 +12,11 @@ import MyBnB.models.composite.ListingWithDistanceAndPrice;
 import MyBnB.repository.implementations.ListingAmenitiesRepository;
 import MyBnB.repository.implementations.ListingRepository;
 
+import MyBnB.services.ListingSearchQueryBuilder;
 import java.time.LocalDate;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -36,6 +39,7 @@ public class ListingController {
   ListingAmenitiesRepository listingAmenitiesRepository;
 
   public enum OrderBy{
+    NONE,
     DISTANCE,
     PRICE_ASC,
     PRICE_DESC
@@ -116,6 +120,26 @@ public class ListingController {
     return listingRepository.getListingsWithinPriceRange(minPrice, maxPrice);
   }
 
+  @GetMapping("/getByFullSearch")
+  public List<Listing> getAllListingsByFullSearch(@RequestParam(value = "latitude", required = false) Double latitude,
+                                                 @RequestParam(value = "longitude", required = false) Double longitude,
+                                                 @RequestParam(value = "radius", required = false, defaultValue = "50") Double radius,
+                                                 @RequestParam(value = "postalcode", required = false) String postalCode,
+                                                 @RequestParam(value = "addressLine", required = false) String addressLine,
+                                                 @RequestParam(value = "minPrice", required = false) Double minPrice,
+                                                 @RequestParam(value = "maxPrice", required = false) Double maxPrice,
+                                                 @RequestParam(value = "amenities", required = false) List<String> amenitiesList,
+                                                 @RequestParam(value = "startDate", required = false)
+                                                   @DateTimeFormat(iso=DateTimeFormat.ISO.DATE) LocalDate startDate,
+                                                 @RequestParam(value = "endDate", required = false)
+                                                   @DateTimeFormat(iso=DateTimeFormat.ISO.DATE) LocalDate endDate,
+                                                 @RequestParam(value = "OrderBy") OrderBy orderBy){
+
+    String fullQuery = ListingSearchQueryBuilder.buildSQLQueryStringFromParams(latitude, longitude,
+        radius, postalCode, addressLine, minPrice, maxPrice, amenitiesList, startDate, endDate, orderBy);
+
+    return listingRepository.getListingByFullSearchQuery(fullQuery);
+  }
 
 
 

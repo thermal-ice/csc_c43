@@ -179,3 +179,15 @@ create table if not exists Review
 alter table Review
     add primary key (id);
 
+create table if not exists UserSearch
+(
+    id int auto_increment,
+    amenity varchar(50) charset utf8mb3 not null comment 'part of primary key',
+    constraint UserSearch_id_uindex
+            unique (id),
+    constraint UserSearch_Amenities_name_fk
+            foreign key (amenity) references Amenities (name)
+);
+
+alter table UserSearch
+    add primary key (id);

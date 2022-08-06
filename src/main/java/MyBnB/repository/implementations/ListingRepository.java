@@ -2,8 +2,6 @@ package MyBnB.repository.implementations;
 
 import MyBnB.controller.ListingController;
 import MyBnB.models.basic.Listing;
-import MyBnB.models.basic.Renter;
-import MyBnB.models.composite.CityWithListingCount;
 import MyBnB.models.composite.ListingWithAddress;
 import MyBnB.models.composite.ListingWithDistanceAndPrice;
 import MyBnB.models.rowmappers.ListingWithAddressMapper;
@@ -12,7 +10,6 @@ import MyBnB.repository.interfaces.IListingRepository;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -121,16 +118,21 @@ public class ListingRepository implements IListingRepository {
 //  }
 
   public List<Listing> getAllListingsByAmenities(List<String> amenities) {
-    String query = "SELECT L.id FROM Listing L ";
+    String queryToSearch = "SELECT L.id FROM Listing L ";
+    String queryToAddUserSearch;
     if (amenities != null) {
       for (int i=0; i<amenities.size(); i++) {
-        query += (i == 0) ? "WHERE EXISTS " : "AND EXISTS ";
-        query += "(SELECT * FROM ListingAmenities AS LA WHERE L.id = LA.listingID AND LA.amenity = '" + amenities.get(i) + "') ";
+        queryToSearch += (i == 0) ? "WHERE EXISTS " : "AND EXISTS ";
+        queryToSearch += "(SELECT * FROM ListingAmenities AS LA WHERE L.id = LA.listingID AND LA.amenity = '" + amenities.get(i) + "') ";
+
+        // also insert in search table
+        queryToAddUserSearch = "INSERT INTO UserSearch (amenity) VALUES ('" + amenities.get(i) + "');";
+        jdbcTemplate.update(queryToAddUserSearch);
       }
     }
     // if amenities is null then give all listings
-    System.out.println(query);
-    return jdbcTemplate.query(query, new BeanPropertyRowMapper(Listing.class));
+    System.out.println(queryToSearch);
+    return jdbcTemplate.query(queryToSearch, new BeanPropertyRowMapper(Listing.class));
   }
 
 }

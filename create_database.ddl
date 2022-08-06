@@ -51,14 +51,14 @@ create table if not exists Listing
 alter table Listing
     add primary key (id);
 
-create table Address
+create table if not exists Address
 (
-    listingID          int                          not null,
-    country            varchar(50) charset utf8mb3  not null,
-    postalCode         varchar(10) charset utf8mb3  not null,
-    province_territory varchar(30) charset utf8mb3  not null,
-    city               varchar(100) charset utf8mb3 null,
-    addressLine        varchar(500) charset utf8mb3 not null,
+    listingID int not null,
+    country varchar(50) charset utf8mb3 not null,
+    postalCode varchar(10) charset utf8mb3 not null,
+    province_territory varchar(30) charset utf8mb3 not null,
+    city varchar(100) charset utf8mb3 null,
+    addressLine varchar(500) charset utf8mb3 not null,
     constraint Address_listingID_uindex
         unique (listingID),
     constraint Address_Listing_id_fk
@@ -120,15 +120,14 @@ create table if not exists Bookings
     endDate date not null,
     startDate date not null,
     status varchar(11) null,
-    availabilityID int not null,
+    listingID int null,
     constraint Bookings_id_uindex
         unique (id),
-    constraint Bookings_Availabilities_id_fk
-        foreign key (availabilityID) references Availabilities (id)
-            on delete cascade,
     constraint Bookings_Host_id_fk
         foreign key (hostID) references Host (id)
             on delete cascade,
+    constraint Bookings_Listing_id_fk
+        foreign key (listingID) references Listing (id),
     constraint Bookings_Renter_id_fk
         foreign key (renterID) references Renter (id)
             on delete cascade
@@ -136,6 +135,9 @@ create table if not exists Bookings
 
 alter table Bookings
     add primary key (id);
+
+ALTER TABLE Bookings
+    ADD CONSTRAINT Check_bookingDates CHECK ( startDate < endDate);
 
 create table if not exists PaymentInfo
 (
@@ -165,6 +167,7 @@ create table if not exists Review
     revieweeID int not null,
     constraint Review_id_uindex
         unique (id),
+    constraint Review_reviewerID_booking_uindex
         unique (reviewerID, bookingID),
     constraint Review_Bookings_id_fk
         foreign key (bookingID) references Bookings (id)
@@ -181,17 +184,4 @@ create table if not exists Review
 );
 
 alter table Review
-    add primary key (id);
-
-create table if not exists UserSearch
-(
-    id int auto_increment,
-    amenity varchar(50) charset utf8mb3 not null comment 'part of primary key',
-    constraint UserSearch_id_uindex
-            unique (id),
-    constraint UserSearch_Amenities_name_fk
-            foreign key (amenity) references Amenities (name)
-);
-
-alter table UserSearch
     add primary key (id);

@@ -10,5 +10,6 @@ public interface IAmenitiesRepository {
   public List<Amenities> getAllAmenities();
   public Amenities getAmenity(String amenityName);
   public void addAmenity(Amenities amenity);
+  public List<Amenities> getSuggestedAmenities();
 
 }

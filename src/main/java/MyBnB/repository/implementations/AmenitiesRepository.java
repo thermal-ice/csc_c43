@@ -37,4 +37,13 @@ public class AmenitiesRepository implements IAmenitiesRepository {
         amenity.getName(),
         amenity.getType());
   }
+
+  @Override
+  public List<Amenities> getSuggestedAmenities() {
+    // remove from suggested list if num searches for amenity is 0
+    return jdbcTemplate.query("SELECT name, type FROM Amenities A INNER JOIN\n" +
+                    "(SELECT amenity FROM UserSearch WHERE searchCount>0 ORDER BY searchCount DESC LIMIT 10) suggestions\n" +
+                    "WHERE suggestions.amenity=A.name;",
+            new BeanPropertyRowMapper<>(Amenities.class));
+  }
 }

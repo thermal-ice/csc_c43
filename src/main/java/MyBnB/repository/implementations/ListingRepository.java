@@ -66,6 +66,7 @@ public class ListingRepository implements IListingRepository {
     String query = "SELECT *,SQRT(POW(? - latitude, 2) + POW(? - longitude,2)) as distance FROM Listing L INNER JOIN (SELECT listingID, MAX(pricePerNight) as price From Availabilities GROUP BY listingID) as A ON A.listingID = L.id WHERE SQRT(POW(? - latitude, 2) + POW(? - longitude,2)) < ? ";
 
     String endOfQuery = switch (orderBy) {
+      case NONE -> ";";
       case DISTANCE -> "ORDER BY distance ASC;";
       case PRICE_ASC -> "ORDER BY price ASC;";
       case PRICE_DESC -> "ORDER BY price DESC;";
@@ -133,6 +134,10 @@ public class ListingRepository implements IListingRepository {
     // if amenities is null then give all listings
     System.out.println(queryToSearch);
     return jdbcTemplate.query(queryToSearch, new BeanPropertyRowMapper(Listing.class));
+  }
+
+  public List<Listing> getListingByFullSearchQuery(String sqlQuery){
+    return jdbcTemplate.query(sqlQuery,new BeanPropertyRowMapper<>(Listing.class));
   }
 
 }

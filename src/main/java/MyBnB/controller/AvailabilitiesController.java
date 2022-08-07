@@ -29,7 +29,7 @@ public class AvailabilitiesController {
     return availabilitiesRepository.getAvailabilities(listingID);
   }
 
-  @GetMapping("/getAvailabilitiesByID")
+  @GetMapping("/getAvailabilities")
   public List<Availabilities> getAllAvailabilities(@RequestParam("listingID") Integer listingID,
                                                    @RequestParam(value = "startDate", required = false)
                                                    @DateTimeFormat(iso=DateTimeFormat.ISO.DATE) LocalDate startDate,

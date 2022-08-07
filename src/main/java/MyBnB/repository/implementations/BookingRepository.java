@@ -27,9 +27,9 @@ public class BookingRepository implements IBookingRepository {
   @Override
   public Booking getBooking(int bookingID) {
     try{
-      return (Booking) jdbcTemplate.
+      return jdbcTemplate.
           queryForObject("SELECT * FROM Bookings WHERE id=?;",
-          new BeanPropertyRowMapper(Booking.class),
+          new BeanPropertyRowMapper<>(Booking.class),
           bookingID);
     } catch (EmptyResultDataAccessException e){
       return null;

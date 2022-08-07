@@ -221,7 +221,7 @@ values
 
 insert into Review (id, rating, bookingID, listingID, reviewerID, revieweeID, comments)
 values
-  /* Renter 2 and 3 comments on listing 3 with host 1. */e
+  /* Renter 2 and 3 comments on listing 3 with host 1. */
   (1, 4.0, 10, 3, 2, 1, 'Great location. Lovely space. Quick communication.'),
   (2, 4.5, 15, 3, 3, 1, 'Great location and beautiful home! Anne was very responsive and provided any support we needed.'),
   /* Renter 2 comments on listing 5 with host 4. Booking 20. */

@@ -1,15 +1,17 @@
 package MyBnB.models.composite;
 
-import MyBnB.models.basic.Address;
-import MyBnB.models.basic.Listing;
-
-public class CityWithListingCount {
+public class CountryCityWithListingCount {
+    private String country;
     private String city;
     private Integer count;
 
-    public CityWithListingCount(String city, Integer count){
-        this.city = city;
-        this.count = count;
+    public CountryCityWithListingCount() {};
+
+    public String getCountry() {
+        return country;
+    }
+    public void setCountry(String country) {
+        this.country = country;
     }
     public String getCity() {
         return city;

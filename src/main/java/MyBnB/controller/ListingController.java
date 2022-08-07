@@ -1,21 +1,15 @@
 package MyBnB.controller;
 
-import MyBnB.models.basic.Booking;
-import MyBnB.models.basic.Host;
-import MyBnB.models.composite.CityWithListingCount;
-import MyBnB.models.composite.ListingWithAddress;
-import MyBnB.repository.implementations.HostRepository;
+import MyBnB.models.composite.*;
 import MyBnB.models.basic.Amenities;
 import MyBnB.models.basic.Listing;
 import MyBnB.models.basic.ListingAmenities;
-import MyBnB.models.composite.ListingWithDistanceAndPrice;
 import MyBnB.repository.implementations.ListingAmenitiesRepository;
 import MyBnB.repository.implementations.ListingRepository;
 
 import MyBnB.services.ListingSearchQueryBuilder;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -142,24 +136,25 @@ public class ListingController {
 
     return listingRepository.getListingByFullSearchQuery(fullQuery);
   }
+
   @GetMapping("/getByAmenities")
   public List<Listing> getAllListingsByAmenities(@RequestParam(value = "amenities", required = false) List<String> amenities) {
     System.out.println(amenities);
     return listingRepository.getAllListingsByAmenities(amenities);
   }
 
+  @GetMapping("/countByCountry")
+  public List<CountryWithListingCount> getListingCountByCountry() {
+    return listingRepository.getListingCountByCountry();
+  }
 
+  @GetMapping("/countByCountryCity")
+  public List<CountryCityWithListingCount> getListingCountByCountryCity() {
+    return listingRepository.getListingCountByCountryCity();
+  }
 
-
-
-
-
-
-
-
-//  @GetMapping("/countByCity")
-//  public List<CityWithListingCount> getCountListingByCity() {
-//    return listingRepository.getCountListingByCity();
-//  }
-  // TODO: do this for country +
+  @GetMapping("/countByCountryCityPostalCode")
+  public List<CountryCityPostalCodeWithListingCount> getListingCountByCountryCityPostalCode() {
+    return listingRepository.getListingCountByCountryCityPostalCode();
+  }
 }

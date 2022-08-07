@@ -2,8 +2,7 @@ package MyBnB.repository.implementations;
 
 import MyBnB.controller.ListingController;
 import MyBnB.models.basic.Listing;
-import MyBnB.models.composite.ListingWithAddress;
-import MyBnB.models.composite.ListingWithDistanceAndPrice;
+import MyBnB.models.composite.*;
 import MyBnB.models.rowmappers.ListingWithAddressMapper;
 import MyBnB.models.rowmappers.ListingWithDistanceAndPriceMapper;
 import MyBnB.repository.interfaces.IListingRepository;
@@ -113,6 +112,11 @@ public class ListingRepository implements IListingRepository {
         maxPrice);
   }
 
+  @Override
+  public List<CountryWithListingCount> getListingCountByLocation(String country, String city, String postalCode) {
+    return null;
+  }
+
 //  public List<CityWithListingCount> getCountListingByCity() {
 //    String query = "SELECT city, COUNT(*) as count FROM Address A INNER JOIN Listing L on A.listingID = L.id GROUP BY city ORDER BY count DESC;";
 //    return jdbcTemplate.query(query, new CityWithListingCountMapper());
@@ -138,6 +142,20 @@ public class ListingRepository implements IListingRepository {
 
   public List<Listing> getListingByFullSearchQuery(String sqlQuery){
     return jdbcTemplate.query(sqlQuery,new BeanPropertyRowMapper<>(Listing.class));
+  }
+
+  public List<CountryWithListingCount> getListingCountByCountry() {
+    return jdbcTemplate.query("SELECT country, COUNT(*) as count FROM Address A INNER JOIN Listing L on A.listingID = L.id GROUP BY country ORDER BY count DESC;",
+            new BeanPropertyRowMapper<>(CountryWithListingCount.class));
+  }
+
+  public List<CountryCityWithListingCount> getListingCountByCountryCity() {
+    return jdbcTemplate.query("SELECT country, city, COUNT(*) as count FROM Address A INNER JOIN Listing L on A.listingID = L.id GROUP BY city, country ORDER BY count DESC;",
+            new BeanPropertyRowMapper<>(CountryCityWithListingCount.class));
+  }
+  public List<CountryCityPostalCodeWithListingCount> getListingCountByCountryCityPostalCode() {
+    return jdbcTemplate.query("SELECT country, city, postalCode, COUNT(*) as count FROM Address A INNER JOIN Listing L on A.listingID = L.id GROUP BY city, country, postalCode ORDER BY count DESC;",
+            new BeanPropertyRowMapper<>(CountryCityPostalCodeWithListingCount.class));
   }
 
 }

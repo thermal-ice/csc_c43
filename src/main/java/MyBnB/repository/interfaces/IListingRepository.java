@@ -2,11 +2,9 @@ package MyBnB.repository.interfaces;
 
 import MyBnB.controller.ListingController;
 import MyBnB.models.basic.Listing;
-import MyBnB.models.composite.CityWithListingCount;
-import MyBnB.models.composite.ListingWithAddress;
-import MyBnB.models.composite.ListingWithDistanceAndPrice;
+import MyBnB.models.composite.*;
+
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.stereotype.Repository;
 
@@ -22,7 +20,10 @@ public interface IListingRepository {
   public List<ListingWithAddress> getListingsByPostalCode(String postalCode);
   public List<ListingWithAddress> getListingsByAddressLine(String addressLine);
   public List<Listing> getListingsWithinPriceRange(double minPrice, double maxPrice);
-//  public List<CityWithListingCount> getCountListingByCity();
+  public List<CountryWithListingCount> getListingCountByLocation(String country, String city, String postalCode);
+  public List<CountryWithListingCount> getListingCountByCountry();
+  public List<CountryCityWithListingCount> getListingCountByCountryCity();
+  public List<CountryCityPostalCodeWithListingCount> getListingCountByCountryCityPostalCode();
   public List<Listing> getAllListingsByAmenities(List<String> amenities);
 
 }

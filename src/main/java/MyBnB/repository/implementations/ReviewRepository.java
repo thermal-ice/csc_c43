@@ -4,12 +4,20 @@ import MyBnB.models.basic.Review;
 import MyBnB.repository.interfaces.IReviewRepository;
 
 import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public class ReviewRepository implements IReviewRepository {
+
+  @Autowired
+  JdbcTemplate jdbcTemplate;
 
     @Override
     public List<Review> getAllReviews() {// TODO
-        return null;
+        return jdbcTemplate.query("Select * From Review;", new BeanPropertyRowMapper<>(Review.class));
     }
 
     @Override

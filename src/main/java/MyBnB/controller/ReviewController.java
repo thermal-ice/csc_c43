@@ -1,16 +1,23 @@
 package MyBnB.controller;
 
 import MyBnB.models.basic.Renter;
+import MyBnB.models.basic.Review;
 import MyBnB.models.basic.User;
 import MyBnB.repository.implementations.RenterRepository;
+import MyBnB.repository.implementations.ReviewRepository;
+import MyBnB.services.MostPopularNounPhrases;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping(path="/")
+@RequestMapping(path="/reviews")
 public class ReviewController {
+    @Autowired
+    ReviewRepository reviewRepository;
+
 //    @Autowired
 //    ReviewController reviewController;
 //
@@ -34,4 +41,11 @@ public class ReviewController {
 //    public void deleteRenter(@RequestParam("id") int id) {
 //        reviewController.deleteRenter(id);
 //    }
+
+    @GetMapping("/nounPhrases")
+    public Map<Integer, Map<String,Integer>> getNounPhraseCountByListing(){
+
+      List<Review> reviewList = reviewRepository.getAllReviews();
+      return MostPopularNounPhrases.getMostPopularNounPhrases(reviewList);
+    }
 }

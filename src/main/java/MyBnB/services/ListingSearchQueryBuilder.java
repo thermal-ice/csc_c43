@@ -56,15 +56,16 @@ public class ListingSearchQueryBuilder {
       //TODO Do something here with the filter
     }
     if(startDate != null){
-      //TODO Do something here with the filter
+      query = addQueryFilter(query,"Select distinct L.id From Listing L inner join Availabilities A on L.id = A.listingID and '"+startDate.toString()+"' <= DATE(endDate)");
     }
     if (endDate != null){
-      //TODO Do something here with the filter
+      query = addQueryFilter(query,"Select distinct L.id From Listing L inner join Availabilities A on L.id = A.listingID and DATE(startDate) <= '"+endDate.toString() +"'" );
     }
 
     //TODO handle orderby with the other info as well.
 
     String retQuery =  query + " TRUE;";
+    System.out.println(retQuery);
     return retQuery;
   }
 

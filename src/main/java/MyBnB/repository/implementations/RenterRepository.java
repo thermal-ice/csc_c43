@@ -4,6 +4,7 @@ import MyBnB.models.basic.Renter;
 import MyBnB.models.composite.CountryHostIDListingCount;
 import MyBnB.models.composite.RenterIDWithBookingCount;
 import MyBnB.models.composite.RenterIDWithCityWithBookingCount;
+import MyBnB.models.composite.YearUserIDBookingCount;
 import MyBnB.repository.interfaces.IRenterRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -65,5 +66,12 @@ public class RenterRepository implements IRenterRepository {
                         "GROUP BY A.city, B.renterID HAVING (bookingCount >= 0)\n" +
                         "ORDER BY bookingCount DESC;",
                 new BeanPropertyRowMapper(RenterIDWithCityWithBookingCount.class));
+    }
+
+    @Override
+    public List<YearUserIDBookingCount> getRentersRankedByNumberOfCancellationsInYear() {
+        return jdbcTemplate.query("SELECT YEAR(startDate) AS year, renterID as userID, COUNT(renterID) AS cancelledCount FROM Bookings\n" +
+                        "WHERE status = 'CANCELLED' GROUP BY YEAR(startDate), renterID ORDER BY year, renterID;",
+                new BeanPropertyRowMapper(YearUserIDBookingCount.class));
     }
 }

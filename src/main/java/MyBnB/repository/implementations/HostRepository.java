@@ -3,6 +3,7 @@ package MyBnB.repository.implementations;
 import MyBnB.models.basic.Host;
 import MyBnB.models.basic.User;
 import MyBnB.models.composite.CountryCityHostIDListingCount;
+import MyBnB.models.composite.YearUserIDBookingCount;
 import MyBnB.repository.interfaces.IHostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -62,5 +63,12 @@ public class HostRepository implements IHostRepository {
     public List<CountryCityHostIDListingCount> getHostsRankedByNumberOfListingsPerCountryCity() {
         return jdbcTemplate.query("SELECT country, city, hostID, COUNT(*) as count FROM Address A INNER JOIN Listing L on A.listingID = L.id GROUP BY country, city, hostID ORDER BY count DESC;",
                 new BeanPropertyRowMapper(CountryCityHostIDListingCount.class));
+    }
+
+    @Override
+    public List<YearUserIDBookingCount> getHostsRankedByNumberOfCancellationsInYear() {
+        return jdbcTemplate.query("SELECT YEAR(startDate) AS year, hostID as userID, COUNT(hostID) AS cancelledCount FROM Bookings\n" +
+                        "WHERE status = 'CANCELLED' GROUP BY YEAR(startDate), hostID ORDER BY year, hostID;",
+                new BeanPropertyRowMapper(YearUserIDBookingCount.class));
     }
 }

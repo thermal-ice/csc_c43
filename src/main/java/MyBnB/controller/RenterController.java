@@ -5,8 +5,10 @@ import MyBnB.models.basic.User;
 import MyBnB.models.composite.CountryCityHostIDListingCount;
 import MyBnB.models.composite.RenterIDWithBookingCount;
 import MyBnB.models.composite.RenterIDWithCityWithBookingCount;
+import MyBnB.models.composite.YearUserIDBookingCount;
 import MyBnB.repository.implementations.RenterRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -49,5 +51,10 @@ public class RenterController {
     public List<RenterIDWithCityWithBookingCount> getRenterRankedByNumberOfBookingsWithinRangePerCity(@RequestParam("startDate") LocalDate startDate,
                                                                                                      @RequestParam("endDate") LocalDate endDate) {
         return renterRepository.getRenterRankedByNumberOfBookingsWithinRangePerCity(startDate, endDate);
+    }
+
+    @GetMapping("/rankRentersByNumberOfCancellationsInYear")
+    public List<YearUserIDBookingCount> getRentersRankedByNumberOfCancellationsInYear() {
+        return renterRepository.getRentersRankedByNumberOfCancellationsInYear();
     }
 }

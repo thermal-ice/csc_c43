@@ -3,6 +3,7 @@ package MyBnB.controller;
 import MyBnB.models.basic.Host;
 import MyBnB.models.composite.CountryCityHostIDListingCount;
 import MyBnB.models.composite.CountryHostIDListingCount;
+import MyBnB.models.composite.YearUserIDBookingCount;
 import MyBnB.repository.implementations.HostRepository;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,5 +48,10 @@ public class HostController {
     @GetMapping("/rankByNumberOfListingsPerCountryCity")
     public List<CountryCityHostIDListingCount> getHostsRankedByNumberOfListingsPerCountryCity() {
         return hostRepository.getHostsRankedByNumberOfListingsPerCountryCity();
+    }
+
+    @GetMapping("/rankHostsByNumberOfCancellationsInYear")
+    public List<YearUserIDBookingCount> getHostsRankedByNumberOfCancellationsInYear() {
+        return hostRepository.getHostsRankedByNumberOfCancellationsInYear();
     }
 }

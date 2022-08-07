@@ -3,6 +3,7 @@ package MyBnB.repository.interfaces;
 import MyBnB.models.basic.Host;
 import MyBnB.models.composite.CountryCityHostIDListingCount;
 import MyBnB.models.composite.CountryHostIDListingCount;
+import MyBnB.models.composite.YearUserIDBookingCount;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -15,4 +16,5 @@ public interface IHostRepository {
     public void deleteHost(int id);
     public List<CountryHostIDListingCount> getHostsRankedByNumberOfListingsPerCountry();
     public List<CountryCityHostIDListingCount> getHostsRankedByNumberOfListingsPerCountryCity();
+    public List<YearUserIDBookingCount> getHostsRankedByNumberOfCancellationsInYear();
 }

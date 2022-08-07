@@ -3,6 +3,7 @@ package MyBnB.repository.interfaces;
 import MyBnB.models.basic.Renter;
 import MyBnB.models.composite.RenterIDWithBookingCount;
 import MyBnB.models.composite.RenterIDWithCityWithBookingCount;
+import MyBnB.models.composite.YearUserIDBookingCount;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
@@ -16,5 +17,6 @@ public interface IRenterRepository {
     public void deleteRenter(int id);
     public List<RenterIDWithBookingCount> getRenterRankedByNumberOfBookingsWithinRange(LocalDate startDate, LocalDate endDate);
     public List<RenterIDWithCityWithBookingCount> getRenterRankedByNumberOfBookingsWithinRangePerCity(LocalDate startDate, LocalDate endDate);
+    public List<YearUserIDBookingCount> getRentersRankedByNumberOfCancellationsInYear();
 
 }

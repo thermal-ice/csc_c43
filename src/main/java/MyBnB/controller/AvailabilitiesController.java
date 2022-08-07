@@ -2,6 +2,7 @@ package MyBnB.controller;
 
 import MyBnB.models.basic.Availabilities;
 import MyBnB.models.basic.Listing;
+import MyBnB.repository.implementations.AvailabilitiesRepository;
 import MyBnB.repository.interfaces.IAvailabilitiesRepository;
 import java.time.LocalDate;
 import java.util.List;
@@ -17,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class AvailabilitiesController {
 
   @Autowired
-  IAvailabilitiesRepository availabilitiesRepository;
+  AvailabilitiesRepository availabilitiesRepository;
 
   @GetMapping("/all")
   public List<Availabilities> getAllAvailabilities(){

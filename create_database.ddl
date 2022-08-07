@@ -204,3 +204,12 @@ alter table UserSearch
 
 create trigger add_amenity after insert on Amenities for each row
 insert into UserSearch (amenity, searchCount) values (NEW.name, 0);
+
+create trigger add_availability after insert on Availabilities for each row
+update Listing set avgPricePerNight = (select AVG(pricePerNight) from Availabilities where listingID=NEW.listingID) where id = NEW.listingID;
+
+create trigger delete_availability after delete on Availabilities for each row
+update Listing set avgPricePerNight = (select AVG(pricePerNight) from Availabilities where listingID=OLD.listingID) where id = OLD.listingID;
+
+create trigger update_availability after update on Availabilities for each row
+update Listing set avgPricePerNight = (select AVG(pricePerNight) from Availabilities where listingID=NEW.listingID) where id = NEW.listingID;

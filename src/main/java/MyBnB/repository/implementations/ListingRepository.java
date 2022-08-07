@@ -158,8 +158,11 @@ public class ListingRepository implements IListingRepository {
             new BeanPropertyRowMapper<>(CountryCityPostalCodeWithListingCount.class));
   }
 
-  public Float getSuggestedListingPrice(int listingID) {
-    return jdbcTemplate.queryForObject("SELECT country, city, COUNT(*) as count FROM Address A INNER JOIN Listing L on A.listingID = L.id GROUP BY city, country ORDER BY count DESC;",
-            new Object[] { listingID }, Float.class);
+  public Float getSuggestedListingPrice() {
+    Float r = jdbcTemplate.queryForObject("SELECT AVG(avgPricePerNight) FROM Listing L INNER JOIN Address A on L.id = A.listingID\n" +
+                    "WHERE country = 'dd';", Float.class);
+    // null if no rows found
+    System.out.println(r);
+    return r;
   }
 }

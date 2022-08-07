@@ -154,7 +154,7 @@ public class ListingController {
   }
 
   @GetMapping("/getSuggestedPrice")
-  public Float getSuggestedListingPrice(int listingID) {
-    return listingRepository.getSuggestedListingPrice(listingID);
+  public Float getSuggestedListingPrice() {
+    return listingRepository.getSuggestedListingPrice();
   }
 }

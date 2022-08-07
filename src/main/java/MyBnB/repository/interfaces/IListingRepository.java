@@ -25,6 +25,6 @@ public interface IListingRepository {
   public List<CountryCityWithListingCount> getListingCountByCountryCity();
   public List<CountryCityPostalCodeWithListingCount> getListingCountByCountryCityPostalCode();
   public List<Listing> getAllListingsByAmenities(List<String> amenities);
-  public Float getSuggestedListingPrice(int listingID);
+  public Float getSuggestedListingPrice();
 
 }

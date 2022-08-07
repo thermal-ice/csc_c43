@@ -164,6 +164,7 @@ public class ListingRepository implements IListingRepository {
     return jdbcTemplate.query(sqlQuery,new BeanPropertyRowMapper<>(Listing.class));
   }
 
+
   public List<CountryWithListingCount> getListingCountByCountry() {
     return jdbcTemplate.query("SELECT country, COUNT(*) as count FROM Address A INNER JOIN Listing L on A.listingID = L.id GROUP BY country ORDER BY count DESC;",
             new BeanPropertyRowMapper<>(CountryWithListingCount.class));

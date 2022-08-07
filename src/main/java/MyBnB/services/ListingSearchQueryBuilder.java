@@ -43,12 +43,15 @@ public class ListingSearchQueryBuilder {
                                                      LocalDate startDate,
                                                      LocalDate endDate,
                                                      ListingController.OrderBy orderBy){
-    String query = "SELECT * FROM Listing WHERE";
 
+    String queryPrefix = "SELECT * ";
+    String query = "FROM Listing WHERE";
     boolean canOrderByDistance = false;
+
     if (latitude != null && longitude != null && radius != null){
       query = addQueryFilter(query,String.format("SELECT distinct id as distance FROM Listing WHERE SQRT(POW(%f - latitude, 2) + POW(%f - longitude,2)) < %f",latitude,longitude,radius));
-      canOrderByDistance
+      queryPrefix = "SELECT *, SQRT(POW("+latitude+" - latitude, 2) + POW("+longitude+" - longitude,2)) as distance ";
+      canOrderByDistance = true;
     }
     if(postalCode != null && isValidPostalCode(postalCode)){
       String postalCodeFSA = postalCode.substring(0,3);
@@ -74,9 +77,14 @@ public class ListingSearchQueryBuilder {
       query = addQueryFilter(query,"Select distinct L.id From Listing L inner join Availabilities A on L.id = A.listingID and DATE(startDate) <= '"+endDate.toString() +"'" );
     }
 
-    //TODO handle orderby with the other info as well.
+    String querySuffix = (orderBy == null)? " TRUE;" : switch (orderBy){
+      case NONE -> " TRUE;";
+      case DISTANCE -> canOrderByDistance? " TRUE ORDER BY distance ASC;" : " TRUE;";
+      case PRICE_ASC -> " TRUE ORDER BY avgPricePerNight ASC;";
+      case PRICE_DESC -> " TRUE ORDER BY avgPricePerNight DESC;";
+    };
 
-    String retQuery =  query + " TRUE;";
+    String retQuery = queryPrefix + query + querySuffix;
     return retQuery;
   }
 

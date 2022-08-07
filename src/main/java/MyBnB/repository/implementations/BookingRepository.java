@@ -28,7 +28,7 @@ public class BookingRepository implements IBookingRepository {
   public Booking getBooking(int bookingID) {
     try{
       return (Booking) jdbcTemplate.
-          queryForObject("SELECT * FROM Booking WHERE id=?;",
+          queryForObject("SELECT * FROM Bookings WHERE id=?;",
           new BeanPropertyRowMapper(Booking.class),
           bookingID);
     } catch (EmptyResultDataAccessException e){

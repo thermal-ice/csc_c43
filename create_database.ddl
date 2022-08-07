@@ -236,3 +236,47 @@ sp: BEGIN
     Select ('SUCCESS');
 END //
 DELIMITER ;
+
+
+
+DROP PROCEDURE IF EXISTS sp_addBooking;
+DELIMITER //
+CREATE PROCEDURE sp_addBooking(IN in_renterID INT, IN in_listingID int,
+                               IN in_startDate DATE, IN in_endDate DATE)
+sp: BEGIN
+
+    DECLARE existingAvailID INT;
+    DECLARE existingPricePerNight FLOAT;
+    DECLARE existingStartDate DATE;
+    DECLARE existingEndDate DATE;
+    DECLARE existingHostID INT;
+
+
+    START TRANSACTION;
+    IF NOT Exists (Select * FROM Availabilities where listingID = in_listingID AND startDate <= in_startDate AND in_endDate <= endDate) THEN
+        Select (CONCAT('No Availabilities for ListingID:', in_listingID));
+        LEAVE sp;
+    end if;
+
+    SELECT Availabilities.id,pricePerNight,startDate,endDate, hostID INTO existingAvailID,existingPricePerNight,existingStartDate,existingEndDate, existingHostID
+    FROM Availabilities INNER JOIN Listing ON Availabilities.listingID = Listing.id where listingID = in_listingID AND startDate <= in_startDate AND in_endDate <= endDate;
+
+    IF in_startDate = existingStartDate AND in_endDate = existingEndDate THEN
+        DELETE FROM Availabilities WHERE id = existingAvailID;
+    ELSEIF in_startDate = existingStartDate AND in_endDate < existingEndDate THEN
+        UPDATE Availabilities SET startDate = DATE_ADD(in_endDate, INTERVAL 1 DAY) WHERE id = existingAvailID;
+    ELSEIF existingStartDate < in_startDate AND in_endDate = existingEndDate THEN
+        UPDATE Availabilities SET endDate = DATE_SUB(in_startDate, INTERVAL 1 DAY) WHERE id = existingAvailID;
+    ELSE
+        # Must create another availability and update the existing one, since it lies in between the two date boundaries
+        # in_startDate < existingStartDate AND in_endDate < existingEndDate
+        UPDATE Availabilities SET startDate = DATE_ADD(in_endDate, INTERVAL 1 DAY) WHERE id = existingAvailID;
+        INSERT INTO Availabilities (listingID, pricePerNight, startDate, endDate) VALUE (in_listingID,existingPricePerNight,existingStartDate,DATE_SUB(in_startDate, INTERVAL 1 DAY));
+    end if;
+    INSERT INTO Bookings(pricePerNight, listingID, status, startDate, endDate, hostID, renterID)
+        VALUE (existingPricePerNight,in_listingID,'BOOKED',in_startDate,in_endDate,existingHostID,in_renterID);
+
+    COMMIT;
+    Select ('SUCCESS');
+END //
+DELIMITER ;

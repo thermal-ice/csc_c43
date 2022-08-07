@@ -191,22 +191,22 @@ create table if not exists Review
 alter table Review
     add primary key (id);
 
-create table if not exists UserSearch
+create table if not exists AmenitiesSearch
 (
     id int auto_increment,
     amenity varchar(50) charset utf8mb3 not null comment 'part of primary key',
     searchCount int not null,
-    constraint UserSearch_id_uindex
+    constraint AmenitiesSearch_id_uindex
             unique (id),
-    constraint UserSearch_Amenities_name_fk
+    constraint AmenitiesSearch_Amenities_name_fk
             foreign key (amenity) references Amenities (name)
 );
 
-alter table UserSearch
+alter table AmenitiesSearch
     add primary key (id);
 
 create trigger add_amenity after insert on Amenities for each row
-insert into UserSearch (amenity, searchCount) values (NEW.name, 0);
+insert into AmenitiesSearch (amenity, searchCount) values (NEW.name, 0);
 
 create trigger add_availability after insert on Availabilities for each row
 update Listing set avgPricePerNight = (select AVG(pricePerNight) from Availabilities where listingID=NEW.listingID) where id = NEW.listingID;

@@ -10,7 +10,8 @@ public class Booking {
     AVAILABILITY_ID("availabilityID"),
     END_DATE("endDate"),
     START_DATE("startDate"),
-    STATUS("status");
+    STATUS("status"),
+    PRICE_PER_NIGHT("pricePerNight");
     private final String value;
     Field (final String value) { this.value = value; }
     @Override
@@ -24,6 +25,16 @@ public class Booking {
   private LocalDate startDate;
   private LocalDate endDate;
   private String status; //Turn into ENUM probably.
+
+  public double getPricePerNight() {
+    return pricePerNight;
+  }
+
+  public void setPricePerNight(double pricePerNight) {
+    this.pricePerNight = pricePerNight;
+  }
+
+  private double pricePerNight;
 
   public int getId() {
     return id;

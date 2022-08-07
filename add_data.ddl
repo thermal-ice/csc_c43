@@ -231,3 +231,8 @@ values
   (4, 4.0, 10, 3, 1, 2, 'Afsaneh and his guest were very quiet and clean.');
 
 
+call sp_addAvailability(1,150,'2022-07-05','2022-07-20');
+
+call sp_addBooking(3,1,'2022-07-09','2022-07-19');
+
+

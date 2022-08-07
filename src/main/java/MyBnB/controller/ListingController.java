@@ -34,6 +34,9 @@ public class ListingController {
   @Autowired
   ListingAmenitiesRepository listingAmenitiesRepository;
 
+  @Autowired
+  ListingSearchQueryBuilder searchBuilder;
+
   public enum OrderBy{
     NONE,
     DISTANCE,
@@ -92,10 +95,10 @@ public class ListingController {
   }
 
   @GetMapping("/getWithinDistance")
-  public List<ListingWithDistanceAndPrice> getAllListingsWithinDistance(@RequestParam("latitude")  double latitude,
-                                                                        @RequestParam("longitude")  double longitude,
-                                                                        @RequestParam(value = "radius", defaultValue = "50")  double radius,
-                                                                        @RequestParam(value = "OrderBy") OrderBy orderBy){
+  public List<ListingWithDistance> getAllListingsWithinDistance(@RequestParam("latitude")  double latitude,
+                                                                @RequestParam("longitude")  double longitude,
+                                                                @RequestParam(value = "radius", defaultValue = "50")  double radius,
+                                                                @RequestParam(value = "OrderBy") OrderBy orderBy){
     return listingRepository.getListingsWithinDistance(latitude,longitude,radius, orderBy);
   }
 
@@ -131,7 +134,7 @@ public class ListingController {
                                                    @DateTimeFormat(iso=DateTimeFormat.ISO.DATE) LocalDate endDate,
                                                  @RequestParam(value = "OrderBy") OrderBy orderBy){
 
-    String fullQuery = ListingSearchQueryBuilder.buildSQLQueryStringFromParams(latitude, longitude,
+    String fullQuery = searchBuilder.buildSQLQueryStringFromParams(latitude, longitude,
         radius, postalCode, addressLine, minPrice, maxPrice, amenitiesList, startDate, endDate, orderBy);
 
     return listingRepository.getListingByFullSearchQuery(fullQuery);

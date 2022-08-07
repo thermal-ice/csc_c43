@@ -3,6 +3,7 @@ package MyBnB.repository.implementations;
 import MyBnB.models.basic.Availabilities;
 import MyBnB.models.basic.Listing;
 import MyBnB.repository.interfaces.IAvailabilitiesRepository;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.time.LocalDate;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,13 +33,16 @@ public class AvailabilitiesRepository implements IAvailabilitiesRepository {
 
 
   @Override
-  public void addAvailability(Availabilities availability) {
-    jdbcTemplate.update("INSERT INTO Availabilities (startDate, listingID, pricePerNight, endDate)" +
-            "values (?,?,?,?);",
-        availability.getStartDate(),
-        availability.getListingID(),
-        availability.getPricePerNight(),
-        availability.getEndDate());
+  public String addAvailability(Availabilities availability) {
+    try{
+      return jdbcTemplate.queryForObject("CALL sp_addAvailability(?,?,?,?);", String.class,
+          availability.getListingID(),
+          availability.getPricePerNight(),
+          availability.getStartDate(),
+          availability.getEndDate());
+    }catch (Exception e){
+      return "SQL constraints violated";
+    }
   }
 
   @Override

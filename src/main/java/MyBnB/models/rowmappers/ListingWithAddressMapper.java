@@ -19,6 +19,7 @@ public class ListingWithAddressMapper implements RowMapper<ListingWithAddress> {
     currListing.setLatitude(rs.getDouble("latitude"));
     currListing.setLongitude(rs.getDouble("longitude"));
     currListing.setHostID(rs.getInt("hostID"));
+    currListing.setAvgPricePerNight(rs.getDouble("avgPricePerNight"));
 
     currAddress.setAddressLine(rs.getString("addressLine"));
     currAddress.setCity(rs.getString("city"));

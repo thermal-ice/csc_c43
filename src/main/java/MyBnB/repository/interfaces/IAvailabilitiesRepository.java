@@ -12,7 +12,7 @@ public interface IAvailabilitiesRepository {
 
   public List<Availabilities> getAllAvailabilities();
   public List<Availabilities>  getAvailabilities(int listingID, LocalDate startDate);
-  public void addAvailability(Availabilities availability);
+  public String addAvailability(Availabilities availability);
   public  List<Availabilities> getAvailabilities(int listingID);
   public List<Availabilities> getAvailabilities(int listingID, LocalDate startDate, LocalDate endDate);
   public List<Availabilities> getAvailabilities(LocalDate startDate, LocalDate endDate);

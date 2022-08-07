@@ -27,7 +27,8 @@ public class Listing {
     TYPE("type"),
     LATITUDE("latitude"),
     LONGITUDE("longitude"),
-    HOST_ID("hostID");
+    HOST_ID("hostID"),
+    AVG_PRICE_PER_NIGHT("avgPricePerNight");
     private final String value;
     Field (final String value) { this.value = value; }
     @Override
@@ -43,6 +44,15 @@ public class Listing {
   private double latitude;
   private double longitude;
   private int hostID;
+  private double avgPricePerNight;
+
+  public double getAvgPricePerNight() {
+    return avgPricePerNight;
+  }
+
+  public void setAvgPricePerNight(double avgPricePerNight) {
+    this.avgPricePerNight = avgPricePerNight;
+  }
 
   public int getId() {
     return id;

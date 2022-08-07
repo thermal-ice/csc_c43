@@ -41,7 +41,7 @@ create table if not exists Listing
     latitude decimal(8,6) null,
     longitude decimal(9,6) null,
     hostID int not null,
-    avgPricePerNight float not null default 0.00,
+    avgPricePerNight float null,
     constraint Listing_id_uindex
         unique (id),
     constraint Listing_Host_id_fk
@@ -86,6 +86,9 @@ create table if not exists Availabilities
 
 alter table Availabilities
     add primary key (id);
+
+ALTER TABLE Availabilities
+    ADD CONSTRAINT Check_availDates CHECK ( startDate <= endDate);
 
 create table if not exists ListingAmenities
 (
@@ -139,7 +142,7 @@ alter table Bookings
     add primary key (id);
 
 ALTER TABLE Bookings
-    ADD CONSTRAINT Check_bookingDates CHECK ( startDate < endDate);
+    ADD CONSTRAINT Check_bookingDates CHECK ( startDate <= endDate);
 
 create table if not exists PaymentInfo
 (
@@ -213,3 +216,23 @@ update Listing set avgPricePerNight = (select AVG(pricePerNight) from Availabili
 
 create trigger update_availability after update on Availabilities for each row
 update Listing set avgPricePerNight = (select AVG(pricePerNight) from Availabilities where listingID=NEW.listingID) where id = NEW.listingID;
+
+
+
+DROP PROCEDURE IF EXISTS sp_addAvailability;
+
+
+DELIMITER //
+CREATE PROCEDURE sp_addAvailability(IN in_listingID int, IN in_pricePerNight float,
+                                    IN in_startDate DATE, IN in_endDate DATE)
+sp: BEGIN
+    START TRANSACTION;
+    IF Exists (Select * FROM Availabilities where listingID = in_listingID AND startDate <= in_endDate AND endDate >= in_startDate) THEN
+        Select ('AVAILABILITY_OVERLAPPING');
+        LEAVE sp;
+    end if;
+    INSERT INTO Availabilities (listingID, pricePerNight, startDate, endDate) VALUE (in_listingID,in_pricePerNight,in_startDate,in_endDate);
+    COMMIT;
+    Select ('SUCCESS');
+END //
+DELIMITER ;

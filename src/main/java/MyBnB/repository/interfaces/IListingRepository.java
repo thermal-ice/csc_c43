@@ -16,7 +16,7 @@ public interface IListingRepository {
   public void addListing(Listing newListing);
   public void deleteListing(int listingID);
   public void updateListing(Listing updatedListing);
-  public List<ListingWithDistanceAndPrice>  getListingsWithinDistance(double latitude, double longitude, double radius, ListingController.OrderBy orderBy);
+  public List<ListingWithDistance>  getListingsWithinDistance(double latitude, double longitude, double radius, ListingController.OrderBy orderBy);
   public List<ListingWithAddress> getListingsByPostalCode(String postalCode);
   public List<ListingWithAddress> getListingsByAddressLine(String addressLine);
   public List<Listing> getListingsWithinPriceRange(double minPrice, double maxPrice);

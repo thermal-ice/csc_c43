@@ -153,8 +153,8 @@ public class ListingController {
     return listingRepository.getListingCountByCountryCity();
   }
 
-  @GetMapping("/countByCountryCityPostalCode")
-  public List<CountryCityPostalCodeWithListingCount> getListingCountByCountryCityPostalCode() {
-    return listingRepository.getListingCountByCountryCityPostalCode();
+  @GetMapping("/getSuggestedPrice")
+  public Float getSuggestedListingPrice(int listingID) {
+    return listingRepository.getSuggestedListingPrice(listingID);
   }
 }

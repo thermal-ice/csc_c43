@@ -112,15 +112,16 @@ create table if not exists Renter
 alter table Renter
     add primary key (id);
 
-create table if not exists Bookings
+create table Bookings
 (
-    id int auto_increment,
-    renterID int not null,
-    hostID int not null,
-    endDate date not null,
-    startDate date not null,
-    status varchar(11) null,
-    listingID int null,
+    pricePerNight float       not null,
+    listingID     int         null,
+    status        varchar(11) null,
+    startDate     date        not null,
+    endDate       date        not null,
+    hostID        int         not null,
+    renterID      int         not null,
+    id            int auto_increment,
     constraint Bookings_id_uindex
         unique (id),
     constraint Bookings_Host_id_fk

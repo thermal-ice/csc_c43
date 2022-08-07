@@ -87,6 +87,9 @@ create table if not exists Availabilities
 alter table Availabilities
     add primary key (id);
 
+ALTER TABLE Availabilities
+    ADD CONSTRAINT Check_availDates CHECK ( startDate <= endDate);
+
 create table if not exists ListingAmenities
 (
     listingID int not null comment 'part of primary key',
@@ -139,7 +142,7 @@ alter table Bookings
     add primary key (id);
 
 ALTER TABLE Bookings
-    ADD CONSTRAINT Check_bookingDates CHECK ( startDate < endDate);
+    ADD CONSTRAINT Check_bookingDates CHECK ( startDate <= endDate);
 
 create table if not exists PaymentInfo
 (

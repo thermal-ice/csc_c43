@@ -64,7 +64,6 @@ public class ListingSearchQueryBuilder {
 
     //TODO handle orderby with the other info as well.
 
-
     String retQuery =  query + " TRUE;";
     System.out.println(retQuery);
     return retQuery;

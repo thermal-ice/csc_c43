@@ -17,8 +17,6 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import MyBnB.repository.implementations.AddressRepository;
-
 
 @Repository
 public class ListingRepository implements IListingRepository {
@@ -64,14 +62,14 @@ public class ListingRepository implements IListingRepository {
   }
 
   @Override
-  public List<ListingWithDistanceAndPrice> getListingsWithinDistance(double latitude, double longitude, double radius, ListingController.OrderBy orderBy) {
-    String query = "SELECT *,SQRT(POW(? - latitude, 2) + POW(? - longitude,2)) as distance FROM Listing L INNER JOIN (SELECT listingID, MAX(pricePerNight) as price From Availabilities GROUP BY listingID) as A ON A.listingID = L.id WHERE SQRT(POW(? - latitude, 2) + POW(? - longitude,2)) < ? ";
+  public List<ListingWithDistance> getListingsWithinDistance(double latitude, double longitude, double radius, ListingController.OrderBy orderBy) {
+    String query = "SELECT *,SQRT(POW(? - latitude, 2) + POW(? - longitude,2)) as distance FROM Listing L WHERE SQRT(POW(? - latitude, 2) + POW(? - longitude,2)) < ? ";
 
     String endOfQuery = switch (orderBy) {
       case NONE -> ";";
       case DISTANCE -> "ORDER BY distance ASC;";
-      case PRICE_ASC -> "ORDER BY price ASC;";
-      case PRICE_DESC -> "ORDER BY price DESC;";
+      case PRICE_ASC -> "ORDER BY avgPricePerNight ASC;";
+      case PRICE_DESC -> "ORDER BY avgPricePerNight DESC;";
     };
 
     String finalQuery = query + endOfQuery;
@@ -125,23 +123,42 @@ public class ListingRepository implements IListingRepository {
 //    return jdbcTemplate.query(query, new CityWithListingCountMapper());
 //  }
 
-
-  public List<Listing> getAllListingsByAmenities(List<String> amenities) {
+  public String getQueryToSearchByAmenities(List<String> amenities) {
     String queryToSearch = "SELECT L.id FROM Listing L ";
-    String queryToAddUserSearch;
     if (amenities != null) {
       for (int i=0; i<amenities.size(); i++) {
         queryToSearch += (i == 0) ? "WHERE EXISTS " : "AND EXISTS ";
         queryToSearch += "(SELECT * FROM ListingAmenities AS LA WHERE L.id = LA.listingID AND LA.amenity = '" + amenities.get(i) + "') ";
         // also update UserSearch table
         jdbcTemplate.update("UPDATE UserSearch SET searchCount=searchCount+1 WHERE amenity = ?;",
-                amenities.get(i));
+            amenities.get(i));
       }
     }
-    // if amenities is null then give all listings
-    System.out.println(queryToSearch);
-    return jdbcTemplate.query(queryToSearch, new BeanPropertyRowMapper(Listing.class));
+    return queryToSearch;
   }
+
+  public List<Listing> getAllListingsByAmenities(List<String> amenities){
+    String sqlQuery = getQueryToSearchByAmenities(amenities);
+    return jdbcTemplate.query(sqlQuery,new BeanPropertyRowMapper<>(Listing.class));
+  }
+
+
+//  public List<Listing> getAllListingsByAmenities(List<String> amenities) {
+//    String queryToSearch = "SELECT L.id FROM Listing L ";
+//    String queryToAddUserSearch;
+//    if (amenities != null) {
+//      for (int i=0; i<amenities.size(); i++) {
+//        queryToSearch += (i == 0) ? "WHERE EXISTS " : "AND EXISTS ";
+//        queryToSearch += "(SELECT * FROM ListingAmenities AS LA WHERE L.id = LA.listingID AND LA.amenity = '" + amenities.get(i) + "') ";
+//        // also update UserSearch table
+//        jdbcTemplate.update("UPDATE UserSearch SET searchCount=searchCount+1 WHERE amenity = ?;",
+//                amenities.get(i));
+//      }
+//    }
+//    // if amenities is null then give all listings
+//    System.out.println(queryToSearch);
+//    return jdbcTemplate.query(queryToSearch, new BeanPropertyRowMapper<>(Listing.class));
+//  }
 
   public List<Listing> getListingByFullSearchQuery(String sqlQuery){
     return jdbcTemplate.query(sqlQuery,new BeanPropertyRowMapper<>(Listing.class));
@@ -236,4 +253,6 @@ public class ListingRepository implements IListingRepository {
     System.out.println(suggestedPrice);
     return suggestedPrice;
   }
+
+
 }

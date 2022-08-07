@@ -1,16 +1,25 @@
 package MyBnB.services;
 
 import MyBnB.controller.ListingController;
+import MyBnB.repository.implementations.ListingRepository;
 import java.time.LocalDate;
 import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+@Service
 public class ListingSearchQueryBuilder {
 
-  private static String addQueryFilter(String baseQuery, String filter){
+  @Autowired
+  private ListingRepository listingRepository;
+
+
+  private String addQueryFilter(String baseQuery, String filter){
     return baseQuery + " id IN (" + filter + ") AND ";
   }
 
-  private static boolean isValidPostalCode(String postalCode){
+  private boolean isValidPostalCode(String postalCode){
+
     if(postalCode == null){
       return false;
     }
@@ -23,7 +32,7 @@ public class ListingSearchQueryBuilder {
 
   }
 
-  public static String buildSQLQueryStringFromParams(Double latitude,
+  public String buildSQLQueryStringFromParams(Double latitude,
                                                      Double longitude,
                                                      Double radius,
                                                      String postalCode,
@@ -36,8 +45,10 @@ public class ListingSearchQueryBuilder {
                                                      ListingController.OrderBy orderBy){
     String query = "SELECT * FROM Listing WHERE";
 
+    boolean canOrderByDistance = false;
     if (latitude != null && longitude != null && radius != null){
       query = addQueryFilter(query,String.format("SELECT distinct id as distance FROM Listing WHERE SQRT(POW(%f - latitude, 2) + POW(%f - longitude,2)) < %f",latitude,longitude,radius));
+      canOrderByDistance
     }
     if(postalCode != null && isValidPostalCode(postalCode)){
       String postalCodeFSA = postalCode.substring(0,3);
@@ -53,7 +64,8 @@ public class ListingSearchQueryBuilder {
       query = addQueryFilter(query,"Select distinct L.id FROM Listing L INNER JOIN Availabilities A on L.id = A.listingID WHERE pricePerNight < "+ maxPrice);
     }
     if(amenitiesList != null && !amenitiesList.isEmpty()){
-      //TODO Do something here with the filter
+      String sqlQuery = listingRepository.getQueryToSearchByAmenities(amenitiesList);
+      query = addQueryFilter(query,sqlQuery);
     }
     if(startDate != null){
       query = addQueryFilter(query,"Select distinct L.id From Listing L inner join Availabilities A on L.id = A.listingID and '"+startDate.toString()+"' <= DATE(endDate)");
@@ -65,7 +77,6 @@ public class ListingSearchQueryBuilder {
     //TODO handle orderby with the other info as well.
 
     String retQuery =  query + " TRUE;";
-    System.out.println(retQuery);
     return retQuery;
   }
 

@@ -41,7 +41,7 @@ create table if not exists Listing
     latitude decimal(8,6) null,
     longitude decimal(9,6) null,
     hostID int not null,
-    avgPricePerNight float not null default 0.00,
+    avgPricePerNight float null,
     constraint Listing_id_uindex
         unique (id),
     constraint Listing_Host_id_fk

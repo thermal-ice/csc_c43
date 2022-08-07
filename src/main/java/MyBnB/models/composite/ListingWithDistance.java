@@ -2,12 +2,11 @@ package MyBnB.models.composite;
 
 import MyBnB.models.basic.Listing;
 
-public class ListingWithDistanceAndPrice {
+public class ListingWithDistance {
   private Listing listing;
   private double distanceToUser;
-  private double price;
 
-  public ListingWithDistanceAndPrice(Listing listing){
+  public ListingWithDistance(Listing listing){
     this.listing = listing;
   }
 
@@ -27,20 +26,5 @@ public class ListingWithDistanceAndPrice {
     this.distanceToUser = distanceToUser;
   }
 
-  public double getPrice() {
-    return price;
-  }
 
-  public void setPrice(double price) {
-    this.price = price;
-  }
-
-  @Override
-  public String toString() {
-    return "ListingWithDistanceAndPrice{" +
-        "listing=" + listing +
-        ", distanceToUser=" + distanceToUser +
-        ", price=" + price +
-        '}';
-  }
 }

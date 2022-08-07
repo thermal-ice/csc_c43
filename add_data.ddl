@@ -206,12 +206,12 @@ values
     (140.10, '2022-11-05', '2022-11-03', 6),
     (45.50, '2022-11-29', '2022-11-10', 7);
 
-insert into Bookings (id, renterID, hostID, listingID, endDate, startDate, status)
+insert into Bookings (id, renterID, hostID, listingID, endDate, startDate, status, pricePerNight)
 values
-  (10, 2, 1, 3, '2022-11-06', '2022-11-03', 'RESOLVED'),
-  (15, 3, 1, 3, '2022-11-15', '2022-11-09', 'RESOLVED'),
-  (20, 2, 4, 5, '2022-11-18', '2022-11-15', 'RESOLVED'),
-  (25, 2, 4, 7, '2022-11-23', '2022-11-15', 'CANCELLED');
+  (10, 2, 1, 3, '2022-11-06', '2022-11-03', 'RESOLVED', 50),
+  (15, 3, 1, 3, '2022-11-15', '2022-11-09', 'RESOLVED', 50),
+  (20, 2, 4, 5, '2022-11-18', '2022-11-15', 'RESOLVED', 90),
+  (25, 2, 4, 7, '2022-11-23', '2022-11-15', 'CANCELLED', 45.5);
 
 insert into PaymentInfo (id, cardNumber, cardName, expiryDate, renterID)
 values

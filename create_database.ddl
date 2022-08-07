@@ -216,3 +216,23 @@ update Listing set avgPricePerNight = (select AVG(pricePerNight) from Availabili
 
 create trigger update_availability after update on Availabilities for each row
 update Listing set avgPricePerNight = (select AVG(pricePerNight) from Availabilities where listingID=NEW.listingID) where id = NEW.listingID;
+
+
+
+DROP PROCEDURE IF EXISTS sp_addAvailability;
+
+
+DELIMITER //
+CREATE PROCEDURE sp_addAvailability(IN in_listingID int, IN in_pricePerNight float,
+                                    IN in_startDate DATE, IN in_endDate DATE)
+sp: BEGIN
+    START TRANSACTION;
+    IF Exists (Select * FROM Availabilities where listingID = in_listingID AND startDate <= in_endDate AND endDate >= in_startDate) THEN
+        Select ('AVAILABILITY_OVERLAPPING');
+        LEAVE sp;
+    end if;
+    INSERT INTO Availabilities (listingID, pricePerNight, startDate, endDate) VALUE (in_listingID,in_pricePerNight,in_startDate,in_endDate);
+    COMMIT;
+    Select ('SUCCESS');
+END //
+DELIMITER ;

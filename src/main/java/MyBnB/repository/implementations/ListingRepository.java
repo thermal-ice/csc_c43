@@ -1,6 +1,7 @@
 package MyBnB.repository.implementations;
 
 import MyBnB.controller.ListingController;
+import MyBnB.models.basic.Address;
 import MyBnB.models.basic.Listing;
 import MyBnB.models.composite.*;
 import MyBnB.models.rowmappers.ListingWithAddressMapper;
@@ -15,6 +16,8 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+
+import MyBnB.repository.implementations.AddressRepository;
 
 
 @Repository
@@ -158,11 +161,79 @@ public class ListingRepository implements IListingRepository {
             new BeanPropertyRowMapper<>(CountryCityPostalCodeWithListingCount.class));
   }
 
-  public Float getSuggestedListingPrice() {
-    Float r = jdbcTemplate.queryForObject("SELECT AVG(avgPricePerNight) FROM Listing L INNER JOIN Address A on L.id = A.listingID\n" +
-                    "WHERE country = 'dd';", Float.class);
-    // null if no rows found
-    System.out.println(r);
-    return r;
+  // FIXME: couldn't use getAddress from another controller - errored cause jdbcTemplate was null (?) so have to re-add it here...
+  public Address getAddress(int id) {
+    try {
+      return (Address) jdbcTemplate.queryForObject("SELECT * FROM Address WHERE listingID=?;",
+              new BeanPropertyRowMapper(Address.class), id);
+    } catch (EmptyResultDataAccessException e){
+      return null;
+    }
+  }
+
+  private Float getSuggestedListingPriceGlobally() {
+    System.out.println("Suggesting globally...");
+    try {
+      return jdbcTemplate.queryForObject("SELECT AVG(avgPricePerNight) FROM Listing L INNER JOIN Address A on L.id = A.listingID;",
+              Float.class);
+    } catch (EmptyResultDataAccessException e) {
+      return null;
+    }
+  }
+
+  private Float getSuggestedListingPriceByCountry(String country) {
+    System.out.println("Suggesting based on country...");
+    try {
+      return jdbcTemplate.queryForObject("SELECT AVG(avgPricePerNight) FROM Listing L INNER JOIN Address A on L.id = A.listingID\n" +
+                      "WHERE country='" + country + "' HAVING COUNT(L.id) > 1;",
+              Float.class);
+    } catch (EmptyResultDataAccessException e) {
+      return null;
+    }
+
+  }
+
+  private Float getSuggestedListingPriceByCountryCity(String country, String city) {
+    System.out.println("Suggesting based on country, city...");
+    try {
+      return jdbcTemplate.queryForObject("SELECT AVG(avgPricePerNight) FROM Listing L INNER JOIN Address A on L.id = A.listingID\n" +
+                      "WHERE country='" + country + "' AND city='" + city + "' HAVING COUNT(L.id) > 1;",
+              Float.class);
+    } catch (EmptyResultDataAccessException e) {
+      return null;
+    }
+
+  }
+
+  private Float getSuggestedListingPriceByCountryCityPostalCode(String country, String city, String postalCode) {
+    System.out.println("Suggesting based on country, city, postal code...");
+    System.out.println(country + city + postalCode);
+    try {
+      return jdbcTemplate.queryForObject("SELECT AVG(avgPricePerNight) FROM Listing L INNER JOIN Address A on L.id = A.listingID\n" +
+                      "WHERE country='" + country + "' AND city='" + city + "' AND postalCode='" + postalCode + "' HAVING COUNT(L.id) > 1;",
+              Float.class);
+    } catch (EmptyResultDataAccessException e) {
+      System.out.println(e);
+      return null;
+    }
+  }
+
+  public Float getSuggestedListingPrice(int listingID) {
+    // get location of listing
+    Address listingAddr = getAddress(listingID);
+    String country = listingAddr.getCountry();
+    String city = listingAddr.getCity();
+    String postalCode = listingAddr.getPostalCode();
+
+    Float suggestedPrice = getSuggestedListingPriceByCountryCityPostalCode(country, city, postalCode);
+    if (suggestedPrice == null)
+      suggestedPrice = getSuggestedListingPriceByCountryCity(country, city);
+    if (suggestedPrice == null)
+      suggestedPrice = getSuggestedListingPriceByCountry(country);
+    if (suggestedPrice == null)
+      suggestedPrice = getSuggestedListingPriceGlobally();
+
+    System.out.println(suggestedPrice);
+    return suggestedPrice;
   }
 }

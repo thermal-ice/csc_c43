@@ -206,12 +206,12 @@ values
     (140.10, '2022-11-05', '2022-11-03', 6),
     (45.50, '2022-11-05', '2022-11-03', 7);
 
-insert into Bookings (id, renterID, hostID, availabilityID, endDate, startDate, status)
+insert into Bookings (id, renterID, hostID, listingID, endDate, startDate, status)
 values
-  (10, 2, 1, 3, '2022-02-05', '2022-02-03', 'RESOLVED'),
-  (15, 3, 1, 3, '2022-05-08', '2022-05-01', 'RESOLVED'),
-  (20, 2, 4, 5, '2022-02-10', '2022-02-09', 'RESOLVED'),
-  (25, 2, 4, 5, '2022-07-15', '2022-07-10', 'CANCELLED');
+  (10, 2, 1, 3, '2022-11-06', '2022-11-03', 'RESOLVED'),
+  (15, 3, 1, 3, '2022-11-15', '2022-11-09', 'RESOLVED'),
+  (20, 2, 4, 5, '2022-11-18', '2022-11-15', 'RESOLVED'),
+  (25, 2, 4, 7, '2022-11-23', '2022-11-15', 'CANCELLED');
 
 insert into PaymentInfo (id, cardNumber, cardName, expiryDate, renterID)
 values
@@ -221,7 +221,7 @@ values
 
 insert into Review (id, rating, bookingID, listingID, reviewerID, revieweeID, comments)
 values
-  /* Renter 2 and 3 comments on listing 3 with host 1. */
+  /* Renter 2 and 3 comments on listing 3 with host 1. */e
   (1, 4.0, 10, 3, 2, 1, 'Great location. Lovely space. Quick communication.'),
   (2, 4.5, 15, 3, 3, 1, 'Great location and beautiful home! Anne was very responsive and provided any support we needed.'),
   /* Renter 2 comments on listing 5 with host 4. Booking 20. */

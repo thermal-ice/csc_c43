@@ -2,10 +2,14 @@ package MyBnB.controller;
 
 import MyBnB.models.basic.Renter;
 import MyBnB.models.basic.User;
+import MyBnB.models.composite.CountryCityHostIDListingCount;
+import MyBnB.models.composite.RenterIDWithBookingCount;
+import MyBnB.models.composite.RenterIDWithCityWithBookingCount;
 import MyBnB.repository.implementations.RenterRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -33,5 +37,17 @@ public class RenterController {
     @PostMapping("/deleteRenter")
     public void deleteRenter(@RequestParam("id") int id) {
         renterRepository.deleteRenter(id);
+    }
+
+    @GetMapping("/rankByNumberOfBookingsWithinRange")
+    public List<RenterIDWithBookingCount> getRenterRankedByNumberOfBookingsWithinRange(@RequestParam("startDate") LocalDate startDate,
+                                                                                       @RequestParam("endDate") LocalDate endDate) {
+        return renterRepository.getRenterRankedByNumberOfBookingsWithinRange(startDate, endDate);
+    }
+
+    @GetMapping("/rankByNumberOfBookingsWithinRangeInCity")
+    public List<RenterIDWithCityWithBookingCount> getRenterRankedByNumberOfBookingsWithinRangePerCity(@RequestParam("startDate") LocalDate startDate,
+                                                                                                     @RequestParam("endDate") LocalDate endDate) {
+        return renterRepository.getRenterRankedByNumberOfBookingsWithinRangePerCity(startDate, endDate);
     }
 }

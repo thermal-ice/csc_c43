@@ -38,7 +38,7 @@ public class BookingController {
   @GetMapping("/count")
   public Integer getCountBookingsWithinRange(@RequestParam("start-date") LocalDate startDate,
                                                  @RequestParam("end-date") LocalDate endDate,
-                                                 @RequestParam(value = "sort", required = false) String city,
+                                                 @RequestParam(value = "city", required = false) String city,
                                                  @RequestParam(value = "postal-code", required = false) String postalCode) {
     return bookingRepository.getCountBookingsWithinRange(startDate, endDate, city, postalCode);
   }

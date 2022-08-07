@@ -60,11 +60,9 @@ public class BookingRepository implements IBookingRepository {
   public Integer getCountBookingsWithinRange(LocalDate startDate, LocalDate endDate, String city, String postalCode) {
     System.out.println(city + postalCode);
 
-    String query = "SELECT COUNT(*)\n" +
-            "FROM Bookings B\n" +
+    String query = "SELECT COUNT(*) FROM Bookings B\n" +
             "INNER JOIN Address A ON B.listingID = A.listingID\n" +
-            "WHERE (startDate BETWEEN ? AND ?) AND\n" +
-            "      (endDate BETWEEN ? AND ?)\n";
+            "WHERE (startDate BETWEEN ? AND ?) AND (endDate BETWEEN ? AND ?)\n";
     if (city != null)
       query += " AND A." + Address.Field.CITY + " = '" + city + "'";
     if (postalCode != null)

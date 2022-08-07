@@ -1,6 +1,8 @@
 package MyBnB.controller;
 
 import MyBnB.models.basic.Host;
+import MyBnB.models.composite.CountryCityHostIDListingCount;
+import MyBnB.models.composite.CountryHostIDListingCount;
 import MyBnB.repository.implementations.HostRepository;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,5 +37,15 @@ public class HostController {
     @PostMapping("/deleteHost")
     public void deleteHost(@RequestParam("id") int id) {
         hostRepository.deleteHost(id);
+    }
+
+    @GetMapping("/rankByNumberOfListingsPerCountry")
+    public List<CountryHostIDListingCount> getHostsRankedByNumberOfListingsPerCountry() {
+        return hostRepository.getHostsRankedByNumberOfListingsPerCountry();
+    }
+
+    @GetMapping("/rankByNumberOfListingsPerCountryCity")
+    public List<CountryCityHostIDListingCount> getHostsRankedByNumberOfListingsPerCountryCity() {
+        return hostRepository.getHostsRankedByNumberOfListingsPerCountryCity();
     }
 }

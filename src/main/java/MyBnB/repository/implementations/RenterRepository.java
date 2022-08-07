@@ -1,6 +1,9 @@
 package MyBnB.repository.implementations;
 
 import MyBnB.models.basic.Renter;
+import MyBnB.models.composite.CountryHostIDListingCount;
+import MyBnB.models.composite.RenterIDWithBookingCount;
+import MyBnB.models.composite.RenterIDWithCityWithBookingCount;
 import MyBnB.repository.interfaces.IRenterRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -8,6 +11,7 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Repository
@@ -42,5 +46,24 @@ public class RenterRepository implements IRenterRepository {
     public void deleteRenter(int id) {
         jdbcTemplate.update("delete from Renter where id = ?", id);
         userRepository.deleteUser(id);
+    }
+
+    // using BeanPropertyRowMapper didn't allow building the statement with ?
+    @Override
+    public List<RenterIDWithBookingCount> getRenterRankedByNumberOfBookingsWithinRange(LocalDate startDate, LocalDate endDate) {
+        return jdbcTemplate.query("SELECT renterID, COUNT(id) AS bookingCount FROM Bookings\n" +
+                        "WHERE (startDate BETWEEN '" + startDate + "' AND '" + endDate + "') AND (endDate BETWEEN '" + startDate + "' AND '" + endDate + "')\n" +
+                        "GROUP BY renterID ORDER BY bookingCount DESC;",
+                new BeanPropertyRowMapper(RenterIDWithBookingCount.class));
+    }
+
+    // TODO: change this back to bookingCount >= 2
+    @Override
+    public List<RenterIDWithCityWithBookingCount> getRenterRankedByNumberOfBookingsWithinRangePerCity(LocalDate startDate, LocalDate endDate) {
+        return jdbcTemplate.query("SELECT A.city, B.renterID, COUNT(B.id) AS bookingCount FROM Bookings B INNER JOIN Address A ON A.listingID = B.listingID\n" +
+                        "WHERE (B.startDate BETWEEN '" + startDate + "' AND '" + endDate + "') AND (B.endDate BETWEEN '" + startDate + "' AND '" + endDate + "')\n" +
+                        "GROUP BY A.city, B.renterID HAVING (bookingCount >= 0)\n" +
+                        "ORDER BY bookingCount DESC;",
+                new BeanPropertyRowMapper(RenterIDWithCityWithBookingCount.class));
     }
 }

@@ -58,6 +58,10 @@ public class AmenitiesRepository implements IAmenitiesRepository {
 
   private List<Integer> getListingIDsWithExactAmenities(int listingID, List<String> amenityNames) {
     String query = "SELECT DISTINCT L.id FROM Listing AS L INNER JOIN ListingAmenities LA on L.id = LA.listingID\n";
+
+    if (amenityNames.isEmpty())
+      return new ArrayList<>(); // return empty list
+
     for (int i=0; i<amenityNames.size(); i++) {
       query += (i == 0) ? "WHERE EXISTS " : "AND EXISTS ";
       query += "(SELECT * FROM ListingAmenities AS LA WHERE L.id = LA.listingID AND LA.amenity = '" + amenityNames.get(i) + "')\n";
@@ -77,11 +81,13 @@ public class AmenitiesRepository implements IAmenitiesRepository {
     amenityNames.add(amenityToAdd);
     System.out.println(amenityNames);
     List<Integer> listingIDsWithSameAmenitiesPlusAmenityToAdd = getListingIDsWithExactAmenities(listingID, amenityNames);
+    if (listingIDsWithSameAmenitiesPlusAmenityToAdd.isEmpty())
+      return null; // FIXME: no matches so what to return
 
     String query = "SELECT L.avgPricePerNight - AVG(sub.avgPriceWExtraAmenity) AS avgPriceWExtraAmenityOfAllMatchingListings\n" +
-            "FROM (SELECT L.avgPricePerNight AS avgPriceWExtraAmenity FROM Listing L WHERE ";
+            "FROM (SELECT L.avgPricePerNight AS avgPriceWExtraAmenity FROM Listing L ";
     for (int i=0; i<listingIDsWithSameAmenitiesPlusAmenityToAdd.size(); i++) {
-      query += (i == 0) ? "L.id=" + listingIDsWithSameAmenitiesPlusAmenityToAdd.get(i)
+      query += (i == 0) ? "WHERE L.id=" + listingIDsWithSameAmenitiesPlusAmenityToAdd.get(i)
               : " OR L.id=" + listingIDsWithSameAmenitiesPlusAmenityToAdd.get(i);
     }
     query += ") sub, Listing L WHERE L.id=" + listingID + ";";

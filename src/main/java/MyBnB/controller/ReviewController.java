@@ -43,12 +43,12 @@ public class ReviewController {
 //        reviewController.deleteRenter(id);
 //    }
 
-    @GetMapping("/nounPhrases")
-    public Map<Integer, Map<String,Integer>> getNounPhraseCountByListing(){
-
-      List<Review> reviewList = reviewRepository.getAllReviews();
-      return MostPopularNounPhrases.getMostPopularNounPhrases(reviewList);
-    }
+//    @GetMapping("/nounPhrases")
+//    public Map<Integer, Map<String,Integer>> getNounPhraseCountByListing(){
+//
+//      List<Review> reviewList = reviewRepository.getAllReviews();
+//      return MostPopularNounPhrases.getMostPopularNounPhrases(reviewList);
+//    }
 
     @PostMapping(value={"/add","/modify"})
     public String addNewReview(@RequestBody AddReviewBody requestBody){

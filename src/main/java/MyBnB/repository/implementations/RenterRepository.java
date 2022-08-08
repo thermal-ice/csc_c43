@@ -63,7 +63,7 @@ public class RenterRepository implements IRenterRepository {
     public List<RenterIDWithCityWithBookingCount> getRenterRankedByNumberOfBookingsWithinRangePerCity(LocalDate startDate, LocalDate endDate) {
         return jdbcTemplate.query("SELECT A.city, B.renterID, COUNT(B.id) AS bookingCount FROM Bookings B INNER JOIN Address A ON A.listingID = B.listingID\n" +
                         "WHERE (B.startDate BETWEEN '" + startDate + "' AND '" + endDate + "') AND (B.endDate BETWEEN '" + startDate + "' AND '" + endDate + "')\n" +
-                        "GROUP BY A.city, B.renterID HAVING (bookingCount >= 0)\n" +
+                        "GROUP BY A.city, B.renterID HAVING (bookingCount >= 2)\n" +
                         "ORDER BY bookingCount DESC;",
                 new BeanPropertyRowMapper(RenterIDWithCityWithBookingCount.class));
     }

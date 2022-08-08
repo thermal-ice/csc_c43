@@ -41,20 +41,20 @@ public class RenterController {
         renterRepository.deleteRenter(id);
     }
 
-    @GetMapping("/rankByNumberOfBookingsWithinRange")
-    public List<RenterIDWithBookingCount> getRenterRankedByNumberOfBookingsWithinRange(@RequestParam("startDate") LocalDate startDate,
-                                                                                       @RequestParam("endDate") LocalDate endDate) {
-        return renterRepository.getRenterRankedByNumberOfBookingsWithinRange(startDate, endDate);
-    }
-
-    @GetMapping("/rankByNumberOfBookingsWithinRangeInCity")
-    public List<RenterIDWithCityWithBookingCount> getRenterRankedByNumberOfBookingsWithinRangePerCity(@RequestParam("startDate") LocalDate startDate,
-                                                                                                     @RequestParam("endDate") LocalDate endDate) {
-        return renterRepository.getRenterRankedByNumberOfBookingsWithinRangePerCity(startDate, endDate);
-    }
-
-    @GetMapping("/rankRentersByNumberOfCancellationsInYear")
-    public List<YearUserIDBookingCount> getRentersRankedByNumberOfCancellationsInYear() {
-        return renterRepository.getRentersRankedByNumberOfCancellationsInYear();
-    }
+//    @GetMapping("/rankByNumberOfBookingsWithinRange")
+//    public List<RenterIDWithBookingCount> getRenterRankedByNumberOfBookingsWithinRange(@RequestParam("startDate") LocalDate startDate,
+//                                                                                       @RequestParam("endDate") LocalDate endDate) {
+//        return renterRepository.getRenterRankedByNumberOfBookingsWithinRange(startDate, endDate);
+//    }
+//
+//    @GetMapping("/rankByNumberOfBookingsWithinRangeInCity")
+//    public List<RenterIDWithCityWithBookingCount> getRenterRankedByNumberOfBookingsWithinRangePerCity(@RequestParam("startDate") LocalDate startDate,
+//                                                                                                     @RequestParam("endDate") LocalDate endDate) {
+//        return renterRepository.getRenterRankedByNumberOfBookingsWithinRangePerCity(startDate, endDate);
+//    }
+//
+//    @GetMapping("/rankRentersByNumberOfCancellationsInYear")
+//    public List<YearUserIDBookingCount> getRentersRankedByNumberOfCancellationsInYear() {
+//        return renterRepository.getRentersRankedByNumberOfCancellationsInYear();
+//    }
 }

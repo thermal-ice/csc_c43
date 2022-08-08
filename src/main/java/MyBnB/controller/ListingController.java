@@ -146,18 +146,18 @@ public class ListingController {
     return listingRepository.getAllListingsByAmenities(amenities);
   }
 
-  @GetMapping("/countByCountry")
-  public List<CountryWithListingCount> getListingCountByCountry() {
-    return listingRepository.getListingCountByCountry();
-  }
-
-  @GetMapping("/countByCountryCity")
-  public List<CountryCityWithListingCount> getListingCountByCountryCity() {
-    return listingRepository.getListingCountByCountryCity();
-  }
-
-  @GetMapping("/getSuggestedPrice")
-  public Float getSuggestedListingPrice(@RequestParam("listingID") int listingID) {
-    return listingRepository.getSuggestedListingPrice(listingID);
-  }
+//  @GetMapping("/countByCountry")
+//  public List<CountryWithListingCount> getListingCountByCountry() {
+//    return listingRepository.getListingCountByCountry();
+//  }
+//
+//  @GetMapping("/countByCountryCity")
+//  public List<CountryCityWithListingCount> getListingCountByCountryCity() {
+//    return listingRepository.getListingCountByCountryCity();
+//  }
+//
+//  @GetMapping("/getSuggestedPrice")
+//  public Float getSuggestedListingPrice(@RequestParam("listingID") int listingID) {
+//    return listingRepository.getSuggestedListingPrice(listingID);
+//  }
 }

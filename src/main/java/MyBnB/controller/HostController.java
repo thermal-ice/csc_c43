@@ -40,18 +40,18 @@ public class HostController {
         hostRepository.deleteHost(id);
     }
 
-    @GetMapping("/rankByNumberOfListingsPerCountry")
-    public List<CountryHostIDListingCount> getHostsRankedByNumberOfListingsPerCountry() {
-        return hostRepository.getHostsRankedByNumberOfListingsPerCountry();
-    }
-
-    @GetMapping("/rankByNumberOfListingsPerCountryCity")
-    public List<CountryCityHostIDListingCount> getHostsRankedByNumberOfListingsPerCountryCity() {
-        return hostRepository.getHostsRankedByNumberOfListingsPerCountryCity();
-    }
-
-    @GetMapping("/rankHostsByNumberOfCancellationsInYear")
-    public List<YearUserIDBookingCount> getHostsRankedByNumberOfCancellationsInYear() {
-        return hostRepository.getHostsRankedByNumberOfCancellationsInYear();
-    }
+//    @GetMapping("/rankByNumberOfListingsPerCountry")
+//    public List<CountryHostIDListingCount> getHostsRankedByNumberOfListingsPerCountry() {
+//        return hostRepository.getHostsRankedByNumberOfListingsPerCountry();
+//    }
+//
+//    @GetMapping("/rankByNumberOfListingsPerCountryCity")
+//    public List<CountryCityHostIDListingCount> getHostsRankedByNumberOfListingsPerCountryCity() {
+//        return hostRepository.getHostsRankedByNumberOfListingsPerCountryCity();
+//    }
+//
+//    @GetMapping("/rankHostsByNumberOfCancellationsInYear")
+//    public List<YearUserIDBookingCount> getHostsRankedByNumberOfCancellationsInYear() {
+//        return hostRepository.getHostsRankedByNumberOfCancellationsInYear();
+//    }
 }

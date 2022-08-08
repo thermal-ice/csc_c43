@@ -336,3 +336,43 @@ sp: BEGIN
     Select ('SUCCESS');
 END //
 DELIMITER ;
+
+
+
+
+DROP PROCEDURE IF EXISTS sp_addReview;
+DELIMITER //
+CREATE PROCEDURE sp_addReview(IN in_bookingID INT, IN in_reviewerID INT, IN in_rating TINYINT, IN in_comments TEXT)
+sp: BEGIN
+
+    DECLARE existingRevieweeID INT;
+    DECLARE existingListingID INT;
+
+
+
+    START TRANSACTION;
+    IF NOT Exists (Select * From Bookings where id = in_bookingID AND (hostID = in_reviewerID OR renterID = in_reviewerID) AND status != 'CANCELLED') THEN
+        Select (CONCAT('No BookingID found for bookingID=', in_bookingID, ' Or not a proper reviewer with userID=', in_reviewerID));
+        LEAVE sp;
+    end if;
+
+    IF EXISTS(SELECT * FROM Review WHERE reviewerID = in_reviewerID AND bookingID = in_bookingID) THEN
+        UPDATE Review SET rating = in_rating, comments = in_comments WHERE reviewerID = in_reviewerID AND bookingID = in_bookingID;
+        SELECT('Updated the review');
+        COMMIT;
+        LEAVE sp;
+    end if;
+
+    IF EXISTS(SELECT * FROM Bookings WHERE id=in_bookingID AND hostID = in_reviewerID) THEN
+        SELECT listingID, renterID INTO existingListingID, existingRevieweeID FROM Bookings WHERE id=in_bookingID AND hostID = in_reviewerID;
+    ELSE
+        SELECT listingID,hostID INTO existingListingID,existingRevieweeID FROM Bookings WHERE id=in_bookingID AND renterID= in_reviewerID;
+    end if;
+    INSERT INTO Review( comments, rating, bookingID, listingID, reviewerID, revieweeID) VALUE (in_comments, in_rating, in_bookingID, existingListingID, in_reviewerID, existingRevieweeID);
+
+    COMMIT;
+    Select ('ADDED THE REVIEW');
+END //
+DELIMITER ;
+
+

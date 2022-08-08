@@ -1,5 +1,6 @@
 package MyBnB.repository.implementations;
 
+import MyBnB.controller.requestbodies.AddReviewBody;
 import MyBnB.models.basic.Review;
 import MyBnB.repository.interfaces.IReviewRepository;
 
@@ -46,7 +47,16 @@ public class ReviewRepository implements IReviewRepository {
     }
 
     @Override
-    public void addReview(Review newReview) {
-        // TODO
+    public String addReview(AddReviewBody newReview) {
+        return jdbcTemplate.queryForObject("CALL sp_addReview(?,?,?,?);", String.class,
+            newReview.getBookingID(),
+            newReview.getReviewerID(),
+            newReview.getRating(),
+            newReview.getComments());
+    }
+
+    @Override
+    public void deleteReview(Integer reviewID){
+      jdbcTemplate.update("DELETE FROM Review WHERE id=?",reviewID);
     }
 }

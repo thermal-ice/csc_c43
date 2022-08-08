@@ -1,5 +1,6 @@
 package MyBnB.controller;
 
+import MyBnB.controller.requestbodies.DeleteAvailabilityBody;
 import MyBnB.models.basic.Amenities;
 import MyBnB.models.basic.Availabilities;
 import MyBnB.models.basic.Listing;
@@ -72,8 +73,10 @@ public class AvailabilitiesController {
     return availabilitiesRepository.addAvailability(availability);
   }
 
-
-
+  @PostMapping("/deleteAvailability")
+  public String deleteAvailability(@RequestBody DeleteAvailabilityBody requestBody){
+    return availabilitiesRepository.deleteAvailability(requestBody.getAvailID(),requestBody.getHostID());
+  }
 
 
 }

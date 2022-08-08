@@ -18,6 +18,7 @@ public interface IAvailabilitiesRepository {
   public List<Availabilities> getAvailabilities(LocalDate startDate, LocalDate endDate);
   public List<Availabilities> getAvailabilitiesByIDAndEndDate(int listingID, LocalDate endDate);
   public List<Listing> getAvailableListings();
+  public String deleteAvailability(int availID, int hostID);
 
 
 }

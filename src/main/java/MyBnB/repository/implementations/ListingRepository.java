@@ -189,21 +189,21 @@ public class ListingRepository implements IListingRepository {
     }
   }
 
-  private Float getSuggestedListingPriceGlobally() {
+  private Float getSuggestedListingPriceGlobally(int listingID) {
     System.out.println("Suggesting globally...");
     try {
-      return jdbcTemplate.queryForObject("SELECT AVG(avgPricePerNight) FROM Listing L INNER JOIN Address A on L.id = A.listingID;",
+      return jdbcTemplate.queryForObject("SELECT AVG(avgPricePerNight) FROM Listing L INNER JOIN Address A on L.id = A.listingID WHERE AND L.id!=" + listingID + ";",
               Float.class);
     } catch (EmptyResultDataAccessException e) {
       return null;
     }
   }
 
-  private Float getSuggestedListingPriceByCountry(String country) {
+  private Float getSuggestedListingPriceByCountry(int listingID, String country) {
     System.out.println("Suggesting based on country...");
     try {
       return jdbcTemplate.queryForObject("SELECT AVG(avgPricePerNight) FROM Listing L INNER JOIN Address A on L.id = A.listingID\n" +
-                      "WHERE country='" + country + "' HAVING COUNT(L.id) > 1;",
+                      "WHERE country='" + country + "' AND L.id!=" + listingID + ";",
               Float.class);
     } catch (EmptyResultDataAccessException e) {
       return null;
@@ -211,11 +211,11 @@ public class ListingRepository implements IListingRepository {
 
   }
 
-  private Float getSuggestedListingPriceByCountryCity(String country, String city) {
+  private Float getSuggestedListingPriceByCountryCity(int listingID, String country, String city) {
     System.out.println("Suggesting based on country, city...");
     try {
       return jdbcTemplate.queryForObject("SELECT AVG(avgPricePerNight) FROM Listing L INNER JOIN Address A on L.id = A.listingID\n" +
-                      "WHERE country='" + country + "' AND city='" + city + "' HAVING COUNT(L.id) > 1;",
+                      "WHERE country='" + country + "' AND city='" + city + "' AND L.id!=" + listingID + ";",
               Float.class);
     } catch (EmptyResultDataAccessException e) {
       return null;
@@ -223,15 +223,14 @@ public class ListingRepository implements IListingRepository {
 
   }
 
-  private Float getSuggestedListingPriceByCountryCityPostalCode(String country, String city, String postalCode) {
+  private Float getSuggestedListingPriceByCountryCityPostalCode(int listingID, String country, String city, String postalCode) {
     System.out.println("Suggesting based on country, city, postal code...");
     System.out.println(country + city + postalCode);
     try {
       return jdbcTemplate.queryForObject("SELECT AVG(avgPricePerNight) FROM Listing L INNER JOIN Address A on L.id = A.listingID\n" +
-                      "WHERE country='" + country + "' AND city='" + city + "' AND postalCode='" + postalCode + "' HAVING COUNT(L.id) > 1;",
+                      "WHERE country='" + country + "' AND city='" + city + "' AND postalCode='" + postalCode + "' AND L.id!=" + listingID + ";",
               Float.class);
     } catch (EmptyResultDataAccessException e) {
-      System.out.println(e);
       return null;
     }
   }
@@ -243,13 +242,13 @@ public class ListingRepository implements IListingRepository {
     String city = listingAddr.getCity();
     String postalCode = listingAddr.getPostalCode();
 
-    Float suggestedPrice = getSuggestedListingPriceByCountryCityPostalCode(country, city, postalCode);
+    Float suggestedPrice = getSuggestedListingPriceByCountryCityPostalCode(listingID, country, city, postalCode);
     if (suggestedPrice == null)
-      suggestedPrice = getSuggestedListingPriceByCountryCity(country, city);
+      suggestedPrice = getSuggestedListingPriceByCountryCity(listingID, country, city);
     if (suggestedPrice == null)
-      suggestedPrice = getSuggestedListingPriceByCountry(country);
+      suggestedPrice = getSuggestedListingPriceByCountry(listingID, country);
     if (suggestedPrice == null)
-      suggestedPrice = getSuggestedListingPriceGlobally();
+      suggestedPrice = getSuggestedListingPriceGlobally(listingID);
 
     System.out.println(suggestedPrice);
     return suggestedPrice;

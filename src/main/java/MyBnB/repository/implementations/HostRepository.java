@@ -1,6 +1,7 @@
 package MyBnB.repository.implementations;
 
 import MyBnB.models.basic.Host;
+import MyBnB.models.basic.ListingsCountReport;
 import MyBnB.models.basic.User;
 import MyBnB.models.composite.CountryCityHostIDListingCount;
 import MyBnB.models.composite.YearUserIDBookingCount;
@@ -71,4 +72,22 @@ public class HostRepository implements IHostRepository {
                         "WHERE status = 'CANCELLED' GROUP BY YEAR(startDate), hostID ORDER BY year, hostID;",
                 new BeanPropertyRowMapper(YearUserIDBookingCount.class));
     }
+
+  @Override
+  public List<ListingsCountReport> getSuspiciousHosts(boolean withinReason) {
+    if (withinReason){
+      return jdbcTemplate.query("Select * From (Select COUNT(listingID) as hostcityCount,country,city,hostID from Listing inner join Address A on Listing.id = A.listingID Group by country, city, hostID) HostCount inner join\n" +
+          "    (Select Count(listingID) as citylistingCount, country,city From Listing inner join Address A on Listing.id = A.listingID group by country, city) CityCount\n" +
+          "        On HostCount.city = CityCount.city AND HostCount.country = CityCount.country\n" +
+          "        AND HostCount.hostcityCount  > CityCount.citylistingCount * 0.1\n" +
+          "        AND CityCount.citylistingCount > 20;", new BeanPropertyRowMapper<>(ListingsCountReport.class));
+    }
+
+    return jdbcTemplate.query("Select * From (Select COUNT(listingID) as hostcityCount,country,city,hostID from Listing inner join Address A on Listing.id = A.listingID Group by country, city, hostID) HostCount inner join\n" +
+        "    (Select Count(listingID) as citylistingCount, country,city From Listing inner join Address A on Listing.id = A.listingID group by country, city) CityCount\n" +
+        "        On HostCount.city = CityCount.city AND HostCount.country = CityCount.country\n" +
+        "        AND HostCount.hostcityCount  > CityCount.citylistingCount * 0.1;", new BeanPropertyRowMapper<>(ListingsCountReport.class));
+  }
+
+
 }

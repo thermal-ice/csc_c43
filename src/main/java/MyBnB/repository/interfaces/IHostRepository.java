@@ -1,6 +1,7 @@
 package MyBnB.repository.interfaces;
 
 import MyBnB.models.basic.Host;
+import MyBnB.models.basic.ListingsCountReport;
 import MyBnB.models.composite.CountryCityHostIDListingCount;
 import MyBnB.models.composite.CountryHostIDListingCount;
 import MyBnB.models.composite.YearUserIDBookingCount;
@@ -17,4 +18,5 @@ public interface IHostRepository {
     public List<CountryHostIDListingCount> getHostsRankedByNumberOfListingsPerCountry();
     public List<CountryCityHostIDListingCount> getHostsRankedByNumberOfListingsPerCountryCity();
     public List<YearUserIDBookingCount> getHostsRankedByNumberOfCancellationsInYear();
+    public List<ListingsCountReport> getSuspiciousHosts(boolean withinReason);
 }

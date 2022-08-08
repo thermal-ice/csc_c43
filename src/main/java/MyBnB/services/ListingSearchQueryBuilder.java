@@ -85,7 +85,6 @@ public class ListingSearchQueryBuilder {
     };
 
     String retQuery = queryPrefix + query + querySuffix;
-    System.out.println(retQuery);
     return retQuery;
   }
 

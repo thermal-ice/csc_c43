@@ -130,7 +130,7 @@ public class ListingRepository implements IListingRepository {
         queryToSearch += (i == 0) ? "WHERE EXISTS " : "AND EXISTS ";
         queryToSearch += "(SELECT * FROM ListingAmenities AS LA WHERE L.id = LA.listingID AND LA.amenity = '" + amenities.get(i) + "') ";
         // also update UserSearch table
-        jdbcTemplate.update("UPDATE UserSearch SET searchCount=searchCount+1 WHERE amenity = ?;",
+        jdbcTemplate.update("UPDATE AmenitiesSearch SET searchCount=searchCount+1 WHERE amenity = ?;",
             amenities.get(i));
       }
     }

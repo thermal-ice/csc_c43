@@ -230,12 +230,16 @@ sp: BEGIN
     IF Exists (Select * FROM Availabilities where listingID = in_listingID AND startDate <= in_endDate AND endDate >= in_startDate) THEN
         Select ('AVAILABILITY_OVERLAPPING');
         LEAVE sp;
+    ELSEIF EXISTS(SELECT * FROM Bookings WHERE listingID=in_listingID AND startDate <= in_endDate AND endDate >= in_startDate AND status != 'CANCELLED') THEN
+        Select ('BOOKING_EXISTS, CONFLICT WITH AVAILABILITY');
+        LEAVE sp;
     end if;
     INSERT INTO Availabilities (listingID, pricePerNight, startDate, endDate) VALUE (in_listingID,in_pricePerNight,in_startDate,in_endDate);
     COMMIT;
     Select ('SUCCESS');
 END //
 DELIMITER ;
+
 
 
 

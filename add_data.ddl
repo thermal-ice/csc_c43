@@ -235,4 +235,4 @@ call sp_addAvailability(1,150,'2022-07-05','2022-07-20');
 
 call sp_addBooking(3,1,'2022-07-09','2022-07-19');
 
-
+call sp_cancelBooking(26)

@@ -37,15 +37,16 @@ public class BookingRepository implements IBookingRepository {
   }
 
   @Override
-  public void addBooking(Booking newBooking) {
-    jdbcTemplate.update("INSERT INTO Bookings (renterID, hostID, listingID, endDate, startDate, status)\n" +
-        "VALUES (?, ?, ?, ?, ?, ?);",
-        newBooking.getRenterID(),
-        newBooking.getHostID(),
-        newBooking.getListingID(),
-        newBooking.getEndDate(),
-        newBooking.getStartDate(),
-        newBooking.getStatus());
+  public String addBooking(Integer renterID, Integer listingID, LocalDate startDate, LocalDate endDate) {
+    try{
+      return jdbcTemplate.queryForObject("CALL sp_addBooking(?,?,?,?);", String.class,
+          renterID,
+          listingID,
+          startDate,
+          endDate);
+    }catch (Exception e){
+      return "SQL constraints violated";
+    }
   }
 
   @Override
@@ -72,6 +73,16 @@ public class BookingRepository implements IBookingRepository {
     System.out.println(query + "\n");
     return jdbcTemplate.queryForObject(query,
             Integer.class, startDate, endDate, startDate, endDate);
+  }
+
+  @Override
+  public String cancelBooking(int bookingID) {
+    try{
+      return jdbcTemplate.queryForObject("CALL sp_cancelBooking(?);", String.class,
+          bookingID);
+    }catch (Exception e){
+      return "SQL constraints violated";
+    }
   }
 
 }

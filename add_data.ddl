@@ -1,26 +1,30 @@
+/* adding id to better identify if user is renter or host
+# hosts are in 100s, renters are in 200s */
 insert into User (id, name, birthdate, occupation, sin)
 values
     (1, 'Avery Marchmount', '2000-05-21', 'architect', '233 472 976'),
     (2, 'Afsaneh Ali', '1998-02-05', 'product manager', '951 558 030'),
     (3, 'William Fairgrie', '2000-05-21', 'student', '202 397 022'),
-    (4, 'Afsaneh Ali', '1995-12-10', 'farmer', '233 834 928');
+    (4, 'Afsaneh Ali', '1995-12-10', 'farmer', '233 834 928'),
+    (5, 'Jaskaran Klein', '1995-12-10', 'civil servant', '936 828 987');
 
 insert into Renter values (2);
 insert into Renter values (3);
+insert into Renter values (5);
 
 insert into Host values (1);
 insert into Host values (4);
 
-/* Two houses. Fix addressID. */
+/* First 5 listings are 10km around UTSC, rest are more than 10km. */
 insert into Listing (id, type, latitude, longitude, hostID)
 values
-    (1, 'Apartment', '22.784762', '-32.100073', 1),
-    (2, 'House', '88.795449', '-53.210433',  1),
-    (3, 'House', '65.795449', '-23.210433', 1),
-    (4, 'Secondary Unit', '34.794959', '-79.210433', 1),
-    (5, 'Unique space', '43.795959', '-99.210433', 4),
-    (6, 'Bed and breakfast', '43.795959', '-82.220433', 4),
-    (7, 'Bed and breakfast', '55.795959', '-80.220433', 4);
+    (1, 'Apartment', '43.79678986790671', '-79.17036799080888',         1), 
+    (2, 'House',  '43.78288852948999', '-79.20516312657959',              1),
+    (3, 'House', '43.77644879150473', '-79.25768022775479',             1),
+    (4, 'Secondary Unit', '43.7650401461228', '-79.15159576483828',    1),
+    (5, 'Unique space', '43.77730841204887', '-79.25755579307835',      4),
+    (6, 'Bed and breakfast', '43.72849657610648', '-79.44928245355135', 4),
+    (7, 'Bed and breakfast', '43.95152166364383', '-79.39049251233449', 4);
 
 insert into Amenities (type, name)
 values
@@ -194,31 +198,40 @@ insert into Address (listingID, addressLine, city, province_territory, postalCod
 values
     (1, '2089 Columbia Road', 'Scarborough', 'ON', 'H7M 4V2', 'Canada'),
     (2, '3230 Travis Street', 'Newmarket', 'ON', 'P5E 1E8', 'Canada'),
-    (3, '872 Bubby Drive', 'Aurora', 'ON', 'H1W 0T2', 'Canada'),
+    (3, '872 Bubby Drive', 'Aurora', 'ON', 'H1W 0T2', 'Canada'), # booking
     (4, '412 Sardis Station', 'Richmondhill', 'ON', 'N8P 2M9', 'Canada'),
-    (5, '3945 Emily Drive', 'Vaughan', 'ON', 'N0J 6K4', 'Canada'),
-    (6, '1076 Travis Street', 'Scarborough', 'ON', 'B1C 6T0', 'Canada'),
-    (7, '4604 Glen Street', 'Newmarket', 'ON', 'N0J 6K5', 'Canada');
+    (5, '3945 Emily Drive', 'Aurora', 'ON', 'H1W 0T2', 'Canada'), # booking
+    (6, '1076 Travis Street', 'Scarborough', 'ON', 'B1C 6T0', 'Canada'), #booking
+    (7, '4604 Glen Street', 'Newmarket', 'ON', 'N0J 6K6', 'Canada'); # booking
 
-/* Give valid date ranges. Include different prices per time slot. */
+/* 2020, 2021, 2022 availabilities. */
 insert into Availabilities (pricePerNight, endDate, startDate, listingID)
 values
-    (60.99, '2022-10-05', '2022-10-03', 1),
-    (100.99, '2022-11-05', '2022-11-03', 1),
-    (200.00, '2022-11-05', '2022-11-03', 2),
-    (50.00, '2022-11-25', '2022-11-03', 3),
+    (60.99, '2020-10-05', '2020-10-03', 1),
+    (100.99, '2020-11-05', '2020-11-03', 1),
+    (200.00, '2021-11-05', '2021-11-03', 2),
+    (50.00, '2021-11-25', '2021-11-03', 3), # booking
+    (149.0, '2022-11-30', '2022-08-06', 3),
     (44.00, '2022-11-05', '2022-11-03', 4),
-    (90.00, '2022-11-20', '2022-11-05', 5),
-    (140.10, '2022-11-05', '2022-11-03', 6),
-    (45.50, '2022-11-29', '2022-11-10', 7),
-    (149.0, '2022-11-30', '2022-08-06', 3);
+    (90.00, '2022-11-20', '2022-11-05', 5), # booking
+    (140.10, '2022-11-05', '2022-11-03', 6), # booking
+    (45.50, '2022-11-29', '2022-11-10', 7); # booking
 
+/* Listing 3, 5, 7 have bookings. */
 insert into Bookings (id, renterID, hostID, listingID, endDate, startDate, status, pricePerNight)
 values
-  (10, 2, 1, 3, '2022-11-06', '2022-11-03', 'RESOLVED', 50),
-  (15, 3, 1, 3, '2022-11-15', '2022-11-09', 'RESOLVED', 50),
-  (20, 2, 4, 5, '2022-11-18', '2022-11-15', 'RESOLVED', 90),
-  (25, 2, 4, 7, '2022-11-23', '2022-11-15', 'CANCELLED', 45.5);
+  (0, 5, 1, 1, '2020-10-05', '2020-10-04', 'BOOKED', 60.99),
+
+  (1, 2, 1, 3, '2021-11-06', '2021-11-03', 'BOOKED', 50),
+  (2, 2, 1, 3, '2021-11-07', '2021-11-07', 'BOOKED', 50),
+  (3, 3, 1, 3, '2021-11-15', '2021-11-09', 'BOOKED', 50),
+
+  (4, 2, 4, 5, '2022-11-18', '2022-11-15', 'BOOKED', 90),
+
+  (5, 2, 4, 6, '2022-11-03', '2022-11-03', 'BOOKED', 140.10),
+
+  (6, 2, 4, 7, '2022-11-23', '2022-11-15', 'CANCELLED', 45.5),
+  (7, 2, 4, 7, '2022-11-23', '2022-11-15', 'CANCELLED', 45.5);
 
 insert into PaymentInfo (id, cardNumber, cardName, expiryDate, renterID)
 values

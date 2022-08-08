@@ -18,13 +18,13 @@ insert into Host values (4);
 /* First 5 listings are 10km around UTSC, rest are more than 10km. */
 insert into Listing (id, type, latitude, longitude, hostID)
 values
-    (1, 'Apartment', '43.79678986790671', '-79.17036799080888',         1),
-    (2, 'House',  '43.78288852948999', '-79.20516312657959',              1),
-    (3, 'House', '43.77644879150473', '-79.25768022775479',             1),
-    (4, 'Secondary Unit', '43.7650401461228', '-79.15159576483828',    1),
-    (5, 'Unique space', '43.77730841204887', '-79.25755579307835',      4),
-    (6, 'Bed and breakfast', '43.72849657610648', '-79.44928245355135', 4),
-    (7, 'Bed and breakfast', '43.95152166364383', '-79.39049251233449', 4);
+    (1, 'Apartment', '22.784762', '-32.100073', 1),
+    (2, 'House', '88.795449', '-53.210433',  1),
+    (3, 'House', '65.795449', '-23.210433', 1),
+    (4, 'Secondary Unit', '34.794959', '-79.210433', 1),
+    (5, 'Unique space', '43.795959', '-99.210433', 4),
+    (6, 'Bed and breakfast', '43.795959', '-82.220433', 4),
+    (7, 'Bed and breakfast', '55.795959', '-80.220433', 4);
 
 insert into Amenities (type, name)
 values

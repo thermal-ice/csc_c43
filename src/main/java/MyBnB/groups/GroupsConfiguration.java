@@ -22,7 +22,6 @@ public class GroupsConfiguration {
     return GroupedOpenApi.builder()
         .addOpenApiCustomiser(openApiCustomiserPublic())
         .group("public-stuff")
-        .pathsToMatch(matchingPaths)
         .build();
   }
 

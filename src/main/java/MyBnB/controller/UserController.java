@@ -18,13 +18,7 @@ public class UserController {
     @Autowired
     UserRepository userRepository;
 
-    // testing purposes
 
-    @GetMapping("/check")
-    @Tag(name = "blah")
-    public String check() {
-        return "App is running...";
-    }
 
     @GetMapping("/getUserNames")
     public List<String> getUserNames() {

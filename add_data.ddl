@@ -18,7 +18,7 @@ insert into Host values (4);
 /* First 5 listings are 10km around UTSC, rest are more than 10km. */
 insert into Listing (id, type, latitude, longitude, hostID)
 values
-    (1, 'Apartment', '43.79678986790671', '-79.17036799080888',         1), 
+    (1, 'Apartment', '43.79678986790671', '-79.17036799080888',         1),
     (2, 'House',  '43.78288852948999', '-79.20516312657959',              1),
     (3, 'House', '43.77644879150473', '-79.25768022775479',             1),
     (4, 'Secondary Unit', '43.7650401461228', '-79.15159576483828',    1),
@@ -179,7 +179,7 @@ values
   (5, 'Hair dryer'),
   (5, 'Cleaning products'),
   (5, 'Coffee maker'),
-  
+
   (6, 'Dining table'),
   (6, 'Hair dryer'),
   (6, 'Cleaning products'),
@@ -196,21 +196,21 @@ values
 
 insert into Address (listingID, addressLine, city, province_territory, postalCode, country)
 values
-    (1, '2089 Columbia Road', 'Scarborough', 'ON', 'H7M 4V2', 'Canada'),
-    (2, '3230 Travis Street', 'Newmarket', 'ON', 'P5E 1E8', 'Canada'),
+    (1, '2089 Columbia Road', 'Buffalo', 'NY', 'H7M 4V2', 'USA'),
+    (2, '3230 Travis Street', 'Buffalo', 'NY', 'P5E 1E8', 'USA'),
     (3, '872 Bubby Drive', 'Aurora', 'ON', 'H1W 0T2', 'Canada'), # booking
     (4, '412 Sardis Station', 'Richmondhill', 'ON', 'N8P 2M9', 'Canada'),
     (5, '3945 Emily Drive', 'Aurora', 'ON', 'H1W 0T2', 'Canada'), # booking
     (6, '1076 Travis Street', 'Scarborough', 'ON', 'B1C 6T0', 'Canada'), #booking
-    (7, '4604 Glen Street', 'Newmarket', 'ON', 'N0J 6K6', 'Canada'); # booking
+    (7, '4604 Glen Street', 'Buffalo', 'NY', 'N0J 6K6', 'USA'); # booking
 
 /* 2020, 2021, 2022 availabilities. */
 insert into Availabilities (pricePerNight, endDate, startDate, listingID)
 values
-    (60.99, '2020-10-05', '2020-10-03', 1),
+    (60.99, '2020-10-05', '2020-10-03', 1), # booking
     (100.99, '2020-11-05', '2020-11-03', 1),
     (200.00, '2021-11-05', '2021-11-03', 2),
-    (50.00, '2021-11-25', '2021-11-03', 3), # booking
+    (50.00, '2021-11-25', '2021-11-03', 3), # 3x booking
     (149.0, '2022-11-30', '2022-08-06', 3),
     (44.00, '2022-11-05', '2022-11-03', 4),
     (90.00, '2022-11-20', '2022-11-05', 5), # booking
@@ -220,18 +220,18 @@ values
 /* Listing 3, 5, 7 have bookings. */
 insert into Bookings (id, renterID, hostID, listingID, endDate, startDate, status, pricePerNight)
 values
-  (0, 5, 1, 1, '2020-10-05', '2020-10-04', 'BOOKED', 60.99),
+  (10, 5, 1, 1, '2020-10-05', '2020-10-04', 'BOOKED', 60.99),
 
-  (1, 2, 1, 3, '2021-11-06', '2021-11-03', 'BOOKED', 50),
-  (2, 2, 1, 3, '2021-11-07', '2021-11-07', 'BOOKED', 50),
-  (3, 3, 1, 3, '2021-11-15', '2021-11-09', 'BOOKED', 50),
+  (20, 2, 1, 3, '2021-11-06', '2021-11-03', 'BOOKED', 50),
+  (30, 2, 1, 3, '2021-11-07', '2021-11-07', 'BOOKED', 50),
+  (40, 3, 1, 3, '2021-11-15', '2021-11-09', 'BOOKED', 50),
 
-  (4, 2, 4, 5, '2022-11-18', '2022-11-15', 'BOOKED', 90),
+  (50, 2, 4, 5, '2022-11-18', '2022-11-15', 'BOOKED', 90),
 
-  (5, 2, 4, 6, '2022-11-03', '2022-11-03', 'BOOKED', 140.10),
+  (60, 2, 4, 6, '2022-11-03', '2022-11-03', 'BOOKED', 140.10),
 
-  (6, 2, 4, 7, '2022-11-23', '2022-11-15', 'CANCELLED', 45.5),
-  (7, 2, 4, 7, '2022-11-23', '2022-11-15', 'CANCELLED', 45.5);
+  (70, 2, 4, 7, '2022-11-23', '2022-11-15', 'CANCELLED', 45.5),
+  (80, 2, 4, 7, '2022-11-23', '2022-11-15', 'CANCELLED', 45.5);
 
 insert into PaymentInfo (id, cardNumber, cardName, expiryDate, renterID)
 values
@@ -242,12 +242,13 @@ values
 insert into Review (id, rating, bookingID, listingID, reviewerID, revieweeID, comments)
 values
   /* Renter 2 and 3 comments on listing 3 with host 1. */
-  (1, 4.0, 10, 3, 2, 1, 'Great location. Lovely space. Quick communication.'),
-  (2, 4.5, 15, 3, 3, 1, 'Great location and beautiful home! Anne was very responsive and provided any support we needed.'),
+  (1, 4.0, 20, 3, 2, 1, 'Great location. Lovely space. Quick communication.'),
+  (2, 4.5, 30, 3, 3, 1, 'Great location and beautiful home! Anne was very responsive and provided any support we needed.'),
   /* Renter 2 comments on listing 5 with host 4. Booking 20. */
-  (3, 5.0, 20, 5, 2, 4, 'Our stay at Annes place was great - it is a fantastic location with amenities on the water, and communication with her was flawless.'),
+  (3, 5.0, 50, 5, 2, 4, 'Our stay at Annes place was great - it is a fantastic location with amenities on the water, and communication with her was flawless.'),
+  (4, 3.0, 50, 5, 4, 2, 'fantastic location with amenities! flawless.'),
   /* Host 1 comments on renter 2 rented listing 3. */
-  (4, 4.0, 10, 3, 1, 2, 'Afsaneh and his guest were very quiet and clean.');
+  (5, 4.0, 20, 3, 1, 2, 'Afsaneh and his guest were very quiet and clean.');
 
 
 call sp_addAvailability(1,150,'2022-07-05','2022-07-20');

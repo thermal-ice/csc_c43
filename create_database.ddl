@@ -193,17 +193,14 @@ alter table Review
 
 create table if not exists AmenitiesSearch
 (
-    id int auto_increment,
     amenity varchar(50) charset utf8mb3 not null comment 'part of primary key',
     searchCount int not null,
-    constraint AmenitiesSearch_id_uindex
-            unique (id),
     constraint AmenitiesSearch_Amenities_name_fk
             foreign key (amenity) references Amenities (name)
 );
 
 alter table AmenitiesSearch
-    add primary key (id);
+    add primary key (amenity);
 
 create trigger add_amenity after insert on Amenities for each row
 insert into AmenitiesSearch (amenity, searchCount) values (NEW.name, 0);

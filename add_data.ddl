@@ -251,7 +251,7 @@ values
   (3, 5.0, 50, 5, 2, 4, 'Our stay at Annes place was great - it is a fantastic location with amenities on the water, and communication with her was flawless.'),
   (4, 3.0, 50, 5, 4, 2, 'fantastic location with amenities! flawless.'),
   /* Host 1 comments on renter 2 rented listing 3. */
-  (5, 4.0, 20, 3, 1, 2, 'Afsaneh and his guest were very quiet and clean.');
+  (5, 4.0, 20, 3, 1, 2, 'Afsaneh and his guest were very quiet and clean. Great location.');
 
 
 call sp_addAvailability(1,150,'2022-07-05','2022-07-20');

@@ -99,7 +99,7 @@ public class ReportsController {
       @DateTimeFormat(iso=DateTimeFormat.ISO.DATE)  LocalDate startDate,
       @RequestParam("endDate")
       @DateTimeFormat(iso=DateTimeFormat.ISO.DATE)  LocalDate endDate,
-      @RequestParam("withinReasonMinBookingCount") int withinReasonCount) {
+      @RequestParam("minBookingCount") int withinReasonCount) {
     return renterRepository.getRenterRankedByNumberOfBookingsWithinRangePerCity(startDate, endDate, withinReasonCount);
   }
 

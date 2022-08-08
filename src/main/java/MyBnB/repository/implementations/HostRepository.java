@@ -63,7 +63,7 @@ public class HostRepository implements IHostRepository {
     @Override
     public List<CountryCityHostIDListingCount> getHostsRankedByNumberOfListingsPerCountryCity() {
         return jdbcTemplate.query("SELECT country, city, hostID, COUNT(*) as count FROM Address A INNER JOIN Listing L on A.listingID = L.id GROUP BY country, city, hostID ORDER BY country, city, hostID, count DESC;",
-                new BeanPropertyRowMapper(CountryCityHostIDListingCount.class));
+                new BeanPropertyRowMapper<>(CountryCityHostIDListingCount.class));
     }
 
     @Override

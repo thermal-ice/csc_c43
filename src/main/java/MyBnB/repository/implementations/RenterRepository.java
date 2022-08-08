@@ -55,17 +55,17 @@ public class RenterRepository implements IRenterRepository {
         return jdbcTemplate.query("SELECT renterID, COUNT(id) AS bookingCount FROM Bookings\n" +
                         "WHERE (startDate BETWEEN '" + startDate + "' AND '" + endDate + "') AND (endDate BETWEEN '" + startDate + "' AND '" + endDate + "')\n" +
                         "GROUP BY renterID ORDER BY bookingCount DESC;",
-                new BeanPropertyRowMapper(RenterIDWithBookingCount.class));
+                new BeanPropertyRowMapper<>(RenterIDWithBookingCount.class));
     }
 
     // TODO: change this back to bookingCount >= 2
     @Override
-    public List<RenterIDWithCityWithBookingCount> getRenterRankedByNumberOfBookingsWithinRangePerCity(LocalDate startDate, LocalDate endDate, int withinReasonCount) {
+    public List<RenterIDWithCityWithBookingCount> getRenterRankedByNumberOfBookingsWithinRangePerCity(LocalDate startDate, LocalDate endDate, int minBookingCount) {
         return jdbcTemplate.query("SELECT A.city, B.renterID, COUNT(B.id) AS bookingCount FROM Bookings B INNER JOIN Address A ON A.listingID = B.listingID\n" +
                         "WHERE (B.startDate BETWEEN '" + startDate + "' AND '" + endDate + "') AND (B.endDate BETWEEN '" + startDate + "' AND '" + endDate + "')\n" +
-                        "GROUP BY A.city, B.renterID HAVING (bookingCount >= " + withinReasonCount + ")\n" +
+                        "GROUP BY A.city, B.renterID HAVING (bookingCount >= " + minBookingCount + ")\n" +
                         "ORDER BY bookingCount DESC;",
-                new BeanPropertyRowMapper(RenterIDWithCityWithBookingCount.class));
+                new BeanPropertyRowMapper<>(RenterIDWithCityWithBookingCount.class));
     }
 
     @Override

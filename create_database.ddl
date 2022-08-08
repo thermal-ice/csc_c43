@@ -359,8 +359,11 @@ sp: BEGIN
     IF EXISTS(SELECT * FROM Review WHERE reviewerID = in_reviewerID AND bookingID = in_bookingID) THEN
         UPDATE Review SET rating = in_rating, comments = in_comments WHERE reviewerID = in_reviewerID AND bookingID = in_bookingID;
         SELECT('Updated the review');
+        COMMIT;
         LEAVE sp;
-    ELSEIF EXISTS(SELECT * FROM Bookings WHERE id=in_bookingID AND hostID = in_reviewerID) THEN
+    end if;
+
+    IF EXISTS(SELECT * FROM Bookings WHERE id=in_bookingID AND hostID = in_reviewerID) THEN
         SELECT listingID, renterID INTO existingListingID, existingRevieweeID FROM Bookings WHERE id=in_bookingID AND hostID = in_reviewerID;
     ELSE
         SELECT listingID,hostID INTO existingListingID,existingRevieweeID FROM Bookings WHERE id=in_bookingID AND renterID= in_reviewerID;
@@ -371,3 +374,5 @@ sp: BEGIN
     Select ('ADDED THE REVIEW');
 END //
 DELIMITER ;
+
+

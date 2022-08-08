@@ -230,8 +230,108 @@ sp: BEGIN
     IF Exists (Select * FROM Availabilities where listingID = in_listingID AND startDate <= in_endDate AND endDate >= in_startDate) THEN
         Select ('AVAILABILITY_OVERLAPPING');
         LEAVE sp;
+    ELSEIF EXISTS(SELECT * FROM Bookings WHERE listingID=in_listingID AND startDate <= in_endDate AND endDate >= in_startDate AND status != 'CANCELLED') THEN
+        Select ('BOOKING_EXISTS, CONFLICT WITH AVAILABILITY');
+        LEAVE sp;
     end if;
     INSERT INTO Availabilities (listingID, pricePerNight, startDate, endDate) VALUE (in_listingID,in_pricePerNight,in_startDate,in_endDate);
+    COMMIT;
+    Select ('SUCCESS');
+END //
+DELIMITER ;
+
+
+
+
+DROP PROCEDURE IF EXISTS sp_addBooking;
+DELIMITER //
+CREATE PROCEDURE sp_addBooking(IN in_renterID INT, IN in_listingID int,
+                               IN in_startDate DATE, IN in_endDate DATE)
+sp: BEGIN
+
+    DECLARE existingAvailID INT;
+    DECLARE existingPricePerNight FLOAT;
+    DECLARE existingStartDate DATE;
+    DECLARE existingEndDate DATE;
+    DECLARE existingHostID INT;
+
+
+    START TRANSACTION;
+    IF NOT Exists (Select * FROM Availabilities where listingID = in_listingID AND startDate <= in_startDate AND in_endDate <= endDate) THEN
+        Select (CONCAT('No Availabilities for ListingID:', in_listingID));
+        LEAVE sp;
+    end if;
+
+    SELECT Availabilities.id,pricePerNight,startDate,endDate, hostID INTO existingAvailID,existingPricePerNight,existingStartDate,existingEndDate, existingHostID
+    FROM Availabilities INNER JOIN Listing ON Availabilities.listingID = Listing.id where listingID = in_listingID AND startDate <= in_startDate AND in_endDate <= endDate;
+
+    IF in_startDate = existingStartDate AND in_endDate = existingEndDate THEN
+        DELETE FROM Availabilities WHERE id = existingAvailID;
+    ELSEIF in_startDate = existingStartDate AND in_endDate < existingEndDate THEN
+        UPDATE Availabilities SET startDate = DATE_ADD(in_endDate, INTERVAL 1 DAY) WHERE id = existingAvailID;
+    ELSEIF existingStartDate < in_startDate AND in_endDate = existingEndDate THEN
+        UPDATE Availabilities SET endDate = DATE_SUB(in_startDate, INTERVAL 1 DAY) WHERE id = existingAvailID;
+    ELSE
+        # Must create another availability and update the existing one, since it lies in between the two date boundaries
+        # in_startDate < existingStartDate AND in_endDate < existingEndDate
+        UPDATE Availabilities SET startDate = DATE_ADD(in_endDate, INTERVAL 1 DAY) WHERE id = existingAvailID;
+        INSERT INTO Availabilities (listingID, pricePerNight, startDate, endDate) VALUE (in_listingID,existingPricePerNight,existingStartDate,DATE_SUB(in_startDate, INTERVAL 1 DAY));
+    end if;
+    INSERT INTO Bookings(pricePerNight, listingID, status, startDate, endDate, hostID, renterID)
+        VALUE (existingPricePerNight,in_listingID,'BOOKED',in_startDate,in_endDate,existingHostID,in_renterID);
+
+    COMMIT;
+    Select ('SUCCESS');
+END //
+DELIMITER ;
+
+
+
+DROP PROCEDURE IF EXISTS sp_cancelBooking;
+DELIMITER //
+CREATE PROCEDURE sp_cancelBooking(IN in_bookingID INT)
+sp: BEGIN
+
+    DECLARE existingListingID INT;
+    DECLARE existingPricePerNight FLOAT;
+    DECLARE existingStartDate DATE;
+    DECLARE existingEndDate DATE;
+
+    DECLARE availPrecedStartDate DATE;
+    DECLARE availPrecedID INT;
+
+    DECLARE availSucceedID INT;
+    DECLARE availSucceedEndDate DATE;
+
+
+
+    START TRANSACTION;
+    IF NOT Exists (Select * From Bookings where id = in_bookingID) THEN
+        Select (CONCAT('No BookingID found for bookingID=', in_bookingID));
+        LEAVE sp;
+    end if;
+
+    SELECT listingID,pricePerNight,startDate,endDate INTO existingListingID,existingPricePerNight,existingStartDate,existingEndDate FROM Bookings WHERE id= in_bookingID;
+
+    IF EXISTS(SELECT * FROM Availabilities WHERE listingID= existingListingID AND endDate = DATE_SUB(existingStartDate, INTERVAL 1 DAY))
+        AND EXISTS(SELECT * FROM Availabilities WHERE listingID=existingListingID AND startDate = DATE_ADD(existingEndDate, INTERVAL 1 DAY)) THEN
+
+        SELECT id, startDate INTO availPrecedID, availPrecedStartDate FROM Availabilities WHERE listingID= existingListingID AND endDate = DATE_SUB(existingStartDate, INTERVAL 1 DAY);
+        SELECT id, endDate INTO availSucceedID, availSucceedEndDate FROM Availabilities WHERE listingID=existingListingID AND startDate = DATE_ADD(existingEndDate, INTERVAL 1 DAY);
+
+        DELETE FROM Availabilities WHERE id = availSucceedID;
+        UPDATE Availabilities SET endDate = availSucceedEndDate WHERE id = availPrecedID;
+
+    ELSEIF EXISTS(SELECT * FROM Availabilities WHERE listingID= existingListingID AND endDate = DATE_SUB(existingStartDate, INTERVAL 1 DAY)) THEN
+        SELECT id INTO availPrecedID FROM Availabilities WHERE listingID= existingListingID AND endDate = DATE_SUB(existingStartDate, INTERVAL 1 DAY);
+        UPDATE Availabilities SET endDate = existingEndDate WHERE id= availPrecedID;
+    ELSEIF EXISTS(SELECT * FROM Availabilities WHERE listingID=existingListingID AND startDate = DATE_ADD(existingEndDate, INTERVAL 1 DAY)) THEN
+        SELECT id INTO availSucceedID FROM Availabilities WHERE listingID=existingListingID AND startDate = DATE_ADD(existingEndDate, INTERVAL 1 DAY);
+        UPDATE Availabilities SET startDate = existingStartDate WHERE id= availSucceedID;
+    ELSE
+        INSERT INTO Availabilities ( listingID, pricePerNight, startDate, endDate) VALUE (existingListingID,existingPricePerNight,existingStartDate,existingEndDate);
+    end if;
+    UPDATE Bookings SET status='CANCELLED' WHERE id = in_bookingID;
     COMMIT;
     Select ('SUCCESS');
 END //

@@ -13,7 +13,8 @@ import org.springframework.stereotype.Repository;
 public interface IBookingRepository {
   public List<Booking> getAllBookings();
   public Booking getBooking(int bookingID);
-  public void addBooking(Booking newBooking);
+  public String addBooking(Integer renterID, Integer listingID, LocalDate startDate, LocalDate endDate);
   public void deleteBooking(int bookingID);
   public Integer getCountBookingsWithinRange(LocalDate startDate, LocalDate endDate, String city, String postalCode);
+  public String cancelBooking(int bookingID);
 }

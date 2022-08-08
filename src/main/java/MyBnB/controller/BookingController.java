@@ -1,12 +1,12 @@
 package MyBnB.controller;
 
+import MyBnB.controller.requestbodies.AddBookingBody;
+import MyBnB.controller.requestbodies.CancelBookingBody;
 import MyBnB.models.basic.Booking;
-import MyBnB.models.basic.Listing;
 import MyBnB.repository.implementations.BookingRepository;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -31,9 +31,25 @@ public class BookingController {
   }
 
   @PostMapping("/add")
-  public void addBooking(@RequestBody Booking newBooking) {
-    bookingRepository.addBooking(newBooking);
+  public String addBooking(@RequestBody AddBookingBody requestBody) {
+    return bookingRepository.addBooking(requestBody.getRenterID(),
+        requestBody.getListingID(),
+        requestBody.getStartDate(),
+        requestBody.getEndDate());
   }
+
+
+  @PostMapping("/cancel")
+  public String cancelBooking(@RequestBody CancelBookingBody requestBody) {
+
+    Booking currBooking = bookingRepository.getBooking(requestBody.getBookingID());
+    if (currBooking == null || (currBooking.getHostID() != requestBody.getUserID() && currBooking.getRenterID() != requestBody.getUserID())){
+      return "Invalid permissions for cancelling the booking";
+    }
+    return bookingRepository.cancelBooking(requestBody.getBookingID());
+  }
+
+
 
   @GetMapping("/count")
   public Integer getCountBookingsWithinRange(@RequestParam("start-date") LocalDate startDate,

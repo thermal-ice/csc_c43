@@ -1,5 +1,6 @@
 package MyBnB.controller;
 
+import MyBnB.controller.requestbodies.AddReviewBody;
 import MyBnB.models.basic.Renter;
 import MyBnB.models.basic.Review;
 import MyBnB.models.basic.User;
@@ -47,5 +48,15 @@ public class ReviewController {
 
       List<Review> reviewList = reviewRepository.getAllReviews();
       return MostPopularNounPhrases.getMostPopularNounPhrases(reviewList);
+    }
+
+    @PostMapping(value={"/add","/modify"})
+    public String addNewReview(@RequestBody AddReviewBody requestBody){
+      return reviewRepository.addReview(requestBody);
+    }
+
+    @DeleteMapping("/delete")
+    public void deleteReview(@RequestParam Integer reviewID){
+      reviewRepository.deleteReview(reviewID);
     }
 }

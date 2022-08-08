@@ -166,15 +166,21 @@ values
   (3, 'Dishes and silverware'),
   (3, 'Coffee maker'),
 
+  (4, 'Dining table'),
+  (4, 'Hair dryer'),
+  (4, 'Cleaning products'),
   (4, 'Coffee maker'),
-  (4, 'Baking sheet'),
-  (4, 'Outdoor shower'),
-  (4, 'Air conditioning'),
-  (4, 'Body soap'),
-  (4, 'Shampoo'),
 
+  (5, 'Dining table'),
+  (5, 'Hair dryer'),
+  (5, 'Cleaning products'),
+  (5, 'Coffee maker'),
+  
+  (6, 'Dining table'),
+  (6, 'Hair dryer'),
+  (6, 'Cleaning products'),
+  (6, 'Coffee maker'),
   (6, 'Fire pit'),
-  (6, 'Lake access'),
 
   (7, 'Kayak'),
   (7, 'BBQ grill'),

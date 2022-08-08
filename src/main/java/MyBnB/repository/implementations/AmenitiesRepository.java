@@ -1,7 +1,10 @@
 package MyBnB.repository.implementations;
 
 import MyBnB.models.basic.Amenities;
+import MyBnB.models.basic.Listing;
 import MyBnB.repository.interfaces.IAmenitiesRepository;
+
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -18,6 +21,12 @@ public class AmenitiesRepository implements IAmenitiesRepository {
   public List<Amenities> getAllAmenities() {
     return jdbcTemplate.query("SELECT * FROM Amenities;",new BeanPropertyRowMapper<>(
         Amenities.class));
+  }
+
+  @Override
+  public List<String> getAllAmenityNamesOfListing(int listingID) {
+    return jdbcTemplate.queryForList("SELECT amenity FROM ListingAmenities AS LA WHERE LA.listingID=" + listingID + ";",
+            String.class);
   }
 
   @Override
@@ -45,5 +54,44 @@ public class AmenitiesRepository implements IAmenitiesRepository {
                     "(SELECT amenity FROM UserSearch WHERE searchCount>0 ORDER BY searchCount DESC LIMIT 10) suggestions\n" +
                     "WHERE suggestions.amenity=A.name;",
             new BeanPropertyRowMapper<>(Amenities.class));
+  }
+
+  private List<Integer> getListingIDsWithExactAmenities(int listingID, List<String> amenityNames) {
+    String query = "SELECT DISTINCT L.id FROM Listing AS L INNER JOIN ListingAmenities LA on L.id = LA.listingID\n";
+    for (int i=0; i<amenityNames.size(); i++) {
+      query += (i == 0) ? "WHERE EXISTS " : "AND EXISTS ";
+      query += "(SELECT * FROM ListingAmenities AS LA WHERE L.id = LA.listingID AND LA.amenity = '" + amenityNames.get(i) + "')\n";
+    }
+    query += "AND L.id!=" + listingID + "\n" +
+            "GROUP BY L.id\n" +
+            "HAVING COUNT(LA.amenity)=" + amenityNames.size() + ";";
+    System.out.println(query);
+    return jdbcTemplate.queryForList(query, Integer.class);
+  }
+
+  @Override
+  public Float getExpectedIncreaseInPrice(int listingID, String amenityToAdd) {
+    List<String> amenityNames = getAllAmenityNamesOfListing(listingID);
+
+    // the listings amenities + the extra amenity to get the expected increase in listings price for
+    amenityNames.add(amenityToAdd);
+    System.out.println(amenityNames);
+    List<Integer> listingIDsWithSameAmenitiesPlusAmenityToAdd = getListingIDsWithExactAmenities(listingID, amenityNames);
+
+    String query = "SELECT L.avgPricePerNight - AVG(sub.avgPriceWExtraAmenity) AS avgPriceWExtraAmenityOfAllMatchingListings\n" +
+            "FROM (SELECT L.avgPricePerNight AS avgPriceWExtraAmenity FROM Listing L WHERE ";
+    for (int i=0; i<listingIDsWithSameAmenitiesPlusAmenityToAdd.size(); i++) {
+      query += (i == 0) ? "L.id=" + listingIDsWithSameAmenitiesPlusAmenityToAdd.get(i)
+              : " OR L.id=" + listingIDsWithSameAmenitiesPlusAmenityToAdd.get(i);
+    }
+    query += ") sub, Listing L WHERE L.id=" + listingID + ";";
+    System.out.println(query);
+
+    try {
+      return jdbcTemplate.queryForObject(query, Float.class);
+    } catch (EmptyResultDataAccessException e) {
+      System.out.println(e);
+      return null;
+    }
   }
 }

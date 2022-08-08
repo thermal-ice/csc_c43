@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import MyBnB.models.basic.ListingsCountReport;
 import MyBnB.repository.implementations.HostRepository;
 import java.util.List;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -31,8 +32,10 @@ public class ReportsController {
   ReviewRepository reviewRepository;
 
   @GetMapping("/countBookingsWithinRange")
-  public Integer getCountBookingsWithinRange(@RequestParam("start-date") LocalDate startDate,
-                                              @RequestParam("end-date") LocalDate endDate,
+  public Integer getCountBookingsWithinRange(@RequestParam("start-date")
+                                               @DateTimeFormat(iso=DateTimeFormat.ISO.DATE) LocalDate startDate,
+                                              @RequestParam("end-date")
+                                              @DateTimeFormat(iso=DateTimeFormat.ISO.DATE) LocalDate endDate,
                                               @RequestParam(value = "city", required = false) String city,
                                               @RequestParam(value = "postal-code", required = false) String postalCode) {
     return bookingRepository.getCountBookingsWithinRange(startDate, endDate, city, postalCode);
@@ -80,15 +83,15 @@ public class ReportsController {
 
   @GetMapping("/rankByNumberOfBookingsWithinRange")
   public List<RenterIDWithBookingCount> getRenterRankedByNumberOfBookingsWithinRange(
-      @RequestParam("startDate") LocalDate startDate,
-      @RequestParam("endDate") LocalDate endDate) {
+      @RequestParam("startDate") @DateTimeFormat(iso=DateTimeFormat.ISO.DATE) LocalDate startDate,
+      @RequestParam("endDate") @DateTimeFormat(iso=DateTimeFormat.ISO.DATE) LocalDate endDate) {
     return renterRepository.getRenterRankedByNumberOfBookingsWithinRange(startDate, endDate);
   }
 
-  @GetMapping("/rankByNumberOfBookingsWithinRangeInCity")
+  @GetMapping("/rankByNumberOfBookingsWithinRangePerCity")
   public List<RenterIDWithCityWithBookingCount> getRenterRankedByNumberOfBookingsWithinRangePerCity(
-      @RequestParam("startDate") LocalDate startDate,
-      @RequestParam("endDate") LocalDate endDate) {
+      @RequestParam("startDate") @DateTimeFormat(iso=DateTimeFormat.ISO.DATE)  LocalDate startDate,
+      @RequestParam("endDate") @DateTimeFormat(iso=DateTimeFormat.ISO.DATE) LocalDate endDate) {
     return renterRepository.getRenterRankedByNumberOfBookingsWithinRangePerCity(startDate, endDate);
   }
 

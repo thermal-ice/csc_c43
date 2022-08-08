@@ -51,7 +51,7 @@ public class AmenitiesRepository implements IAmenitiesRepository {
   public List<Amenities> getSuggestedAmenities() {
     // remove from suggested list if num searches for amenity is 0
     return jdbcTemplate.query("SELECT name, type FROM Amenities A INNER JOIN\n" +
-                    "(SELECT amenity FROM UserSearch WHERE searchCount>0 ORDER BY searchCount DESC LIMIT 10) suggestions\n" +
+                    "(SELECT amenity FROM AmenitiesSearch WHERE searchCount>0 ORDER BY searchCount DESC LIMIT 10) suggestions\n" +
                     "WHERE suggestions.amenity=A.name;",
             new BeanPropertyRowMapper<>(Amenities.class));
   }
@@ -82,7 +82,7 @@ public class AmenitiesRepository implements IAmenitiesRepository {
     System.out.println(amenityNames);
     List<Integer> listingIDsWithSameAmenitiesPlusAmenityToAdd = getListingIDsWithExactAmenities(listingID, amenityNames);
     if (listingIDsWithSameAmenitiesPlusAmenityToAdd.isEmpty())
-      return null; // FIXME: no matches so what to return
+      return  Float.valueOf(-1); // FIXME: no matches so what to return
 
     String query = "SELECT L.avgPricePerNight - AVG(sub.avgPriceWExtraAmenity) AS avgPriceWExtraAmenityOfAllMatchingListings\n" +
             "FROM (SELECT L.avgPricePerNight AS avgPriceWExtraAmenity FROM Listing L ";
@@ -94,7 +94,8 @@ public class AmenitiesRepository implements IAmenitiesRepository {
     System.out.println(query);
 
     try {
-      return jdbcTemplate.queryForObject(query, Float.class);
+      Float expectedDifference =  jdbcTemplate.queryForObject(query, Float.class);
+      return Math.abs(expectedDifference);
     } catch (EmptyResultDataAccessException e) {
       System.out.println(e);
       return null;

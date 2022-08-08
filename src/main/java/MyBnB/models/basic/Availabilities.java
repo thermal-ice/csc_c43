@@ -15,6 +15,8 @@ public class Availabilities {
     @Override
     public String toString() { return this.value; }
   }
+
+  private int id;
   private LocalDate startDate;
   private int listingID;
   private double pricePerNight;
@@ -50,6 +52,14 @@ public class Availabilities {
 
   public void setEndDate(LocalDate endDate) {
     this.endDate = endDate;
+  }
+
+  public int getId() {
+    return id;
+  }
+
+  public void setId(int id) {
+    this.id = id;
   }
 
   @Override

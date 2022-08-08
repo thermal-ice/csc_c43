@@ -1,5 +1,6 @@
 package MyBnB.repository.implementations;
 
+import MyBnB.models.basic.Address;
 import MyBnB.models.basic.Availabilities;
 import MyBnB.models.basic.Listing;
 import MyBnB.repository.interfaces.IAvailabilitiesRepository;
@@ -84,6 +85,19 @@ public class AvailabilitiesRepository implements IAvailabilitiesRepository {
         new BeanPropertyRowMapper<>(Listing.class));
   }
 
+  @Override
+  public String deleteAvailability(int availID, int hostID) {
+    try {
+      jdbcTemplate.queryForObject("Select * From Availabilities A inner join Listing L on A.listingID = L.id Where A.id = ? AND hostID=?;",
+          new BeanPropertyRowMapper<>(Availabilities.class),
+          availID,
+          hostID);
+      jdbcTemplate.update("DELETE FROM Availabilities WHERE id=?",availID);
+      return "Successfully deleted availability";
+    } catch (EmptyResultDataAccessException e){
+      return "Availability not found, or wrong hostID";
+    }
+  }
 
 
 }

@@ -182,8 +182,8 @@ public class ListingRepository implements IListingRepository {
   // FIXME: couldn't use getAddress from another controller - errored cause jdbcTemplate was null (?) so have to re-add it here...
   public Address getAddress(int id) {
     try {
-      return (Address) jdbcTemplate.queryForObject("SELECT * FROM Address WHERE listingID=?;",
-              new BeanPropertyRowMapper(Address.class), id);
+      return jdbcTemplate.queryForObject("SELECT * FROM Address WHERE listingID=?;",
+              new BeanPropertyRowMapper<>(Address.class), id);
     } catch (EmptyResultDataAccessException e){
       return null;
     }

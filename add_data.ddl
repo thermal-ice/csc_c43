@@ -196,7 +196,7 @@ values
 
 insert into Address (listingID, addressLine, city, province_territory, postalCode, country)
 values
-    (1, '2089 Columbia Road', 'Buffalo', 'NY', 'H7M 4V2', 'USA'),
+    (1, '2089 Columbia Road', 'Buffalo', 'NY', 'H7M 4V2', 'USA'), # booking
     (2, '3230 Travis Street', 'Buffalo', 'NY', 'P5E 1E8', 'USA'),
     (3, '872 Bubby Drive', 'Aurora', 'ON', 'H1W 0T2', 'Canada'), # booking
     (4, '412 Sardis Station', 'Richmondhill', 'ON', 'N8P 2M9', 'Canada'),
@@ -209,6 +209,7 @@ insert into Availabilities (pricePerNight, endDate, startDate, listingID)
 values
     (60.99, '2020-10-05', '2020-10-03', 1), # booking
     (100.99, '2020-11-05', '2020-11-03', 1),
+    (80.00, '2022-01-05', '2022-01-03', 1), #booking
     (200.00, '2021-11-05', '2021-11-03', 2),
     (50.00, '2021-11-25', '2021-11-03', 3), # 3x booking
     (149.0, '2022-11-30', '2022-08-06', 3),
@@ -223,15 +224,18 @@ values
   (10, 5, 1, 1, '2020-10-05', '2020-10-04', 'BOOKED', 60.99),
 
   (20, 2, 1, 3, '2021-11-06', '2021-11-03', 'BOOKED', 50),
+  (25, 2, 1, 3, '2021-11-10', '2021-11-09', 'CANCELLED', 50),
   (30, 2, 1, 3, '2021-11-07', '2021-11-07', 'BOOKED', 50),
-  (40, 3, 1, 3, '2021-11-15', '2021-11-09', 'BOOKED', 50),
+  (40, 3, 1, 3, '2021-11-15', '2021-11-12', 'BOOKED', 50),
 
   (50, 2, 4, 5, '2022-11-18', '2022-11-15', 'BOOKED', 90),
 
   (60, 2, 4, 6, '2022-11-03', '2022-11-03', 'BOOKED', 140.10),
 
   (70, 2, 4, 7, '2022-11-23', '2022-11-15', 'CANCELLED', 45.5),
-  (80, 2, 4, 7, '2022-11-23', '2022-11-15', 'CANCELLED', 45.5);
+  (80, 2, 4, 7, '2022-11-23', '2022-11-15', 'CANCELLED', 45.5),
+
+  (90, 5, 1, 1, '2022-01-04', '2022-01-03', 'CANCELLED', 80.0);
 
 insert into PaymentInfo (id, cardNumber, cardName, expiryDate, renterID)
 values

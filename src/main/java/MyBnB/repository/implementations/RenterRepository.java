@@ -60,10 +60,10 @@ public class RenterRepository implements IRenterRepository {
 
     // TODO: change this back to bookingCount >= 2
     @Override
-    public List<RenterIDWithCityWithBookingCount> getRenterRankedByNumberOfBookingsWithinRangePerCity(LocalDate startDate, LocalDate endDate) {
+    public List<RenterIDWithCityWithBookingCount> getRenterRankedByNumberOfBookingsWithinRangePerCity(LocalDate startDate, LocalDate endDate, int withinReasonCount) {
         return jdbcTemplate.query("SELECT A.city, B.renterID, COUNT(B.id) AS bookingCount FROM Bookings B INNER JOIN Address A ON A.listingID = B.listingID\n" +
                         "WHERE (B.startDate BETWEEN '" + startDate + "' AND '" + endDate + "') AND (B.endDate BETWEEN '" + startDate + "' AND '" + endDate + "')\n" +
-                        "GROUP BY A.city, B.renterID HAVING (bookingCount >= 2)\n" +
+                        "GROUP BY A.city, B.renterID HAVING (bookingCount >= " + withinReasonCount + ")\n" +
                         "ORDER BY bookingCount DESC;",
                 new BeanPropertyRowMapper(RenterIDWithCityWithBookingCount.class));
     }
@@ -71,7 +71,7 @@ public class RenterRepository implements IRenterRepository {
     @Override
     public List<YearUserIDBookingCount> getRentersRankedByNumberOfCancellationsInYear() {
         return jdbcTemplate.query("SELECT YEAR(startDate) AS year, renterID as userID, COUNT(renterID) AS cancelledCount FROM Bookings\n" +
-                        "WHERE status = 'CANCELLED' GROUP BY YEAR(startDate), renterID ORDER BY year, renterID;",
+                        "WHERE status = 'CANCELLED' GROUP BY YEAR(startDate), renterID ORDER BY year DESC;",
                 new BeanPropertyRowMapper(YearUserIDBookingCount.class));
     }
 }

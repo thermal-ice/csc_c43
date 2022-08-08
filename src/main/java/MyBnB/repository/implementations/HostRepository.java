@@ -56,20 +56,20 @@ public class HostRepository implements IHostRepository {
 
     @Override
     public List<CountryHostIDListingCount> getHostsRankedByNumberOfListingsPerCountry() {
-        return jdbcTemplate.query("SELECT country, hostID, COUNT(*) as count FROM Address A INNER JOIN Listing L on A.listingID = L.id GROUP BY country, hostID ORDER BY count DESC;",
+        return jdbcTemplate.query("SELECT country, hostID, COUNT(*) as count FROM Address A INNER JOIN Listing L on A.listingID = L.id GROUP BY country, hostID ORDER BY country, hostID, count DESC;",
                 new BeanPropertyRowMapper(CountryHostIDListingCount.class));
     }
 
     @Override
     public List<CountryCityHostIDListingCount> getHostsRankedByNumberOfListingsPerCountryCity() {
-        return jdbcTemplate.query("SELECT country, city, hostID, COUNT(*) as count FROM Address A INNER JOIN Listing L on A.listingID = L.id GROUP BY country, city, hostID ORDER BY count DESC;",
+        return jdbcTemplate.query("SELECT country, city, hostID, COUNT(*) as count FROM Address A INNER JOIN Listing L on A.listingID = L.id GROUP BY country, city, hostID ORDER BY country, city, hostID, count DESC;",
                 new BeanPropertyRowMapper(CountryCityHostIDListingCount.class));
     }
 
     @Override
     public List<YearUserIDBookingCount> getHostsRankedByNumberOfCancellationsInYear() {
         return jdbcTemplate.query("SELECT YEAR(startDate) AS year, hostID as userID, COUNT(hostID) AS cancelledCount FROM Bookings\n" +
-                        "WHERE status = 'CANCELLED' GROUP BY YEAR(startDate), hostID ORDER BY year, hostID;",
+                        "WHERE status = 'CANCELLED' GROUP BY YEAR(startDate), hostID ORDER BY year DESC;",
                 new BeanPropertyRowMapper(YearUserIDBookingCount.class));
     }
 

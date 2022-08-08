@@ -16,7 +16,7 @@ public interface IRenterRepository {
     public Renter getRenter(int id);
     public void deleteRenter(int id);
     public List<RenterIDWithBookingCount> getRenterRankedByNumberOfBookingsWithinRange(LocalDate startDate, LocalDate endDate);
-    public List<RenterIDWithCityWithBookingCount> getRenterRankedByNumberOfBookingsWithinRangePerCity(LocalDate startDate, LocalDate endDate);
+    public List<RenterIDWithCityWithBookingCount> getRenterRankedByNumberOfBookingsWithinRangePerCity(LocalDate startDate, LocalDate endDate,  int withinReasonCount);
     public List<YearUserIDBookingCount> getRentersRankedByNumberOfCancellationsInYear();
 
 }

@@ -53,17 +53,17 @@ public class ReportsController {
     return listingRepository.getListingCountByCountryCityPostalCode();
   }
 
-  @GetMapping("/getSuggestedPrice")
-  public Float getSuggestedListingPrice(@RequestParam("listingID") int listingID) {
-    return listingRepository.getSuggestedListingPrice(listingID);
-  }
+//  @GetMapping("/getSuggestedPrice")
+//  public Float getSuggestedListingPrice(@RequestParam("listingID") int listingID) {
+//    return listingRepository.getSuggestedListingPrice(listingID);
+//  }
 
-  @GetMapping("/rankByNumberOfListingsPerCountry")
+  @GetMapping("/rankHostsByNumberOfListingsPerCountry")
   public List<CountryHostIDListingCount> getHostsRankedByNumberOfListingsPerCountry() {
     return hostRepository.getHostsRankedByNumberOfListingsPerCountry();
   }
 
-  @GetMapping("/rankByNumberOfListingsPerCountryAndCity")
+  @GetMapping("/rankHostsByNumberOfListingsPerCountryAndCity")
   public List<CountryCityHostIDListingCount> getHostsRankedByNumberOfListingsPerCountryCity() {
     return hostRepository.getHostsRankedByNumberOfListingsPerCountryCity();
   }
@@ -71,6 +71,11 @@ public class ReportsController {
   @GetMapping("/rankHostsByNumberOfCancellationsInYear")
   public List<YearUserIDBookingCount> getHostsRankedByNumberOfCancellationsInYear() {
     return hostRepository.getHostsRankedByNumberOfCancellationsInYear();
+  }
+
+  @GetMapping("/rankRentersByNumberOfCancellationsInYear")
+  public List<YearUserIDBookingCount> getRentersRankedByNumberOfCancellationsInYear() {
+    return renterRepository.getRentersRankedByNumberOfCancellationsInYear();
   }
 
   @GetMapping("/getPotentialCommericalHosts")
@@ -88,13 +93,9 @@ public class ReportsController {
   @GetMapping("/rankByNumberOfBookingsWithinRangeInCity")
   public List<RenterIDWithCityWithBookingCount> getRenterRankedByNumberOfBookingsWithinRangePerCity(
       @RequestParam("startDate") LocalDate startDate,
-      @RequestParam("endDate") LocalDate endDate) {
-    return renterRepository.getRenterRankedByNumberOfBookingsWithinRangePerCity(startDate, endDate);
-  }
-
-  @GetMapping("/rankRentersByNumberOfCancellationsInYear")
-  public List<YearUserIDBookingCount> getRentersRankedByNumberOfCancellationsInYear() {
-    return renterRepository.getRentersRankedByNumberOfCancellationsInYear();
+      @RequestParam("endDate") LocalDate endDate,
+      @RequestParam("withinReasonMinBookingCount") int withinReasonCount) {
+    return renterRepository.getRenterRankedByNumberOfBookingsWithinRangePerCity(startDate, endDate, withinReasonCount);
   }
 
   @GetMapping("/nounPhrases")

@@ -11,5 +11,7 @@ public interface IAmenitiesRepository {
   public Amenities getAmenity(String amenityName);
   public void addAmenity(Amenities amenity);
   public List<Amenities> getSuggestedAmenities();
+  public List<String> getAllAmenityNamesOfListing(int listingID);
+  public Float getExpectedIncreaseInPrice(int listingID, String amenityToAdd);
 
 }

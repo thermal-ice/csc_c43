@@ -36,4 +36,9 @@ public class AmenitiesController {
     public List<Amenities> getSuggestedAmenities() {
         return amenitiesRepository.getSuggestedAmenities();
     }
+
+    @GetMapping("/getExpectedIncreaseInPrice")
+    public Float getExpectedIncreaseInPrice(@RequestParam("listingID") int listingID, @RequestParam("amenityToAdd") String amenityToAdd) {
+        return amenitiesRepository.getExpectedIncreaseInPrice(listingID, amenityToAdd);
+    }
 }
